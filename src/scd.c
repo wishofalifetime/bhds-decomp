@@ -5,12 +5,12 @@
 #include "types.h"
 #include "scd.h"
 
-/* Run the opcode at task->pc. The handler reads its operands via gScdPc. */
-void Scd_Step(ScdTask *task)
+/* Run the opcode at task->pc and return the handler's status. */
+s32 Scd_Step(ScdTask *task)
 {
     u8 *pc = task->pc;
     ScdHandler handler = gScdOpcodeTable[*pc];
 
-    gScdPc = pc;
-    handler();
+    gScd.pc = pc;
+    return handler();
 }

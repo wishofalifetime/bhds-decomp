@@ -1,7 +1,7 @@
 /*
  * main.c - game entry point and per-frame loop.
- * JP (ABHJ): NitroMain at 0x02000B88.
- * Status: matching.
+ * NitroMain is at 0x02000B88 in every region.
+ * Status: matching (JP, US, EU).
  */
 #include "types.h"
 #include "sdk.h"
@@ -18,7 +18,6 @@ extern void func_02077760(void); /* first scene */
 extern void func_020777a0(void);
 extern void func_020777dc(void);
 extern void func_02077cd8(void);
-extern void func_02078344(void); /* game init: power, screens, RNG seed */
 extern void func_02093198(void);
 extern void func_020b82fc(void);
 extern void func_020d8acc(void);
@@ -28,11 +27,13 @@ extern void func_020d8d50(void);
 
 void NitroMain(void)
 {
-    func_02078344();
+    Main_Init();
     VBlankIntrWait();
     GX_DispOn();
     GXS_DispOn();
+#ifndef VERSION_EU
     func_020777a0();
+#endif
     func_02093198();
     func_020708b0();
 

@@ -118,6 +118,14 @@ static int file_exists(const char *path)
 /* ------------------------------------------------------------------ */
 /* compiling                                                          */
 
+/* Preprocessor define selecting the region's code */
+static const char *version_define(const char *region)
+{
+    if (strcmp(region, "u") == 0) return "VERSION_US";
+    if (strcmp(region, "e") == 0) return "VERSION_EU";
+    return "VERSION_JP";
+}
+
 /* Compile src/<name>.c to build/<region>/src/<name>.o */
 static int compile(const char *region, const char *name)
 {
@@ -125,8 +133,8 @@ static int compile(const char *region, const char *name)
     snprintf(out, sizeof(out), "build/%s/src/%s.o", region, name);
     make_parents(out);
     printf("CC    src/%s.c -> %s\n", name, out);
-    if (!run("\"%s\\mwccarm.exe\" %s -o \"%s\" \"src/%s.c\"",
-             env_or("MWCC_DIR", DEFAULT_MWCC_DIR), CFLAGS, out, name)) {
+    if (!run("\"%s\\mwccarm.exe\" %s -D%s -o \"%s\" \"src/%s.c\"",
+             env_or("MWCC_DIR", DEFAULT_MWCC_DIR), CFLAGS, version_define(region), out, name)) {
         fprintf(stderr, "error: compiling src/%s.c failed\n", name);
         return 0;
     }

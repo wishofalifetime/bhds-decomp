@@ -40,6 +40,7 @@ typedef struct UnkStruct_02143640 {
 extern UnkStruct_02143640 data_02143640;
 
 /* JP addresses */
+void Main_Init(void);             /* 0x02078344 (EU: different code) */
 void Main_EndFrame(void);         /* 0x02077FE8 */
 void Main_VBlankHandler(void);    /* 0x02078068 */
 void Main_InitVBlank(void);       /* 0x020780E4 */

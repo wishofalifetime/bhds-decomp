@@ -1,6 +1,11 @@
 #ifndef BHDS_TYPES_H
 #define BHDS_TYPES_H
 
+/* The build defines exactly one of VERSION_JP, VERSION_US, VERSION_EU. */
+#if !defined(VERSION_JP) && !defined(VERSION_US) && !defined(VERSION_EU)
+#error "Define VERSION_JP, VERSION_US or VERSION_EU"
+#endif
+
 typedef unsigned char       u8;
 typedef unsigned short      u16;
 typedef unsigned long       u32;
