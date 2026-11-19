@@ -1,0 +1,22 @@
+# Never commit copyrighted game data
+*.nds
+*.srl
+*.sav
+baserom*
+!baseroms.sha1
+/orig/
+/extract/
+/build/
+
+# Ghidra / REA local project files
+*.gpr
+*.rep/
+*.lock
+*.lock~
+*.rea/
+
+# OS / editor
+Thumbs.db
+.DS_Store
+.vscode/
+__pycache__/
