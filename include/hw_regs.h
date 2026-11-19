@@ -37,6 +37,9 @@
 #define DISP3DCNT_RDLINES_UNDERFLOW  0x1000  /* bit 12, write 1 to acknowledge */
 #define DISP3DCNT_RAM_OVERFLOW       0x2000  /* bit 13, write 1 to acknowledge */
 
+/* --- Interrupts --- */
+#define REG_IME             (*(vu16 *)0x04000208)  /* bit 0: master enable */
+
 /* --- Keypad --- */
 /* KEYINPUT: 0 = pressed. Bits: A, B, Select, Start, Right, Left, Up, Down, R, L */
 #define REG_KEYINPUT        (*(vu16 *)0x04000130)

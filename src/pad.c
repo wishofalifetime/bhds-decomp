@@ -1,7 +1,11 @@
 /*
  * pad.c - button input.
  * JP (ABHJ): Pad_Update at 0x02073B98.
- * Status: decompiled, NOT yet verified to match (compiler not set up).
+ * Status: NOT matching (20/45). Same instructions and order, but the lid
+ * flag lands in r1 and the key mask in r0 in the original (swapped here).
+ * Tried without success: declaration order, BOOL/int/u8/u16/s32 types,
+ * macro vs inline PAD helpers, open-coded fold test, xy temp, ternary,
+ * pointer local, no prev temp, store order, keys=0 + if(!folded).
  */
 #include "types.h"
 #include "sdk.h"

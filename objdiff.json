@@ -22,8 +22,8 @@
   ],
   "units": [
     {
-      "name": "_dsd_gap@main_6",
-      "target_path": "build/j/delinks/_dsd_gap@main_6.o",
+      "name": "_dsd_gap@main_7",
+      "target_path": "build/j/delinks/_dsd_gap@main_7.o",
       "metadata": {
         "complete": false,
         "reverse_fn_order": false,
@@ -35,7 +35,7 @@
       "target_path": "build/j/delinks/src/main.o",
       "base_path": "build/j/src/main.o",
       "metadata": {
-        "complete": false,
+        "complete": true,
         "reverse_fn_order": false,
         "source_path": "src/main.c",
         "auto_generated": false
@@ -75,15 +75,46 @@
       "target_path": "build/j/delinks/src/system.o",
       "base_path": "build/j/src/system.o",
       "metadata": {
-        "complete": false,
+        "complete": true,
         "reverse_fn_order": false,
         "source_path": "src/system.c",
         "auto_generated": false
       }
     },
     {
+      "name": "src/heap",
+      "target_path": "build/j/delinks/src/heap.o",
+      "base_path": "build/j/src/heap.o",
+      "metadata": {
+        "complete": false,
+        "reverse_fn_order": false,
+        "source_path": "src/heap.c",
+        "auto_generated": false
+      }
+    },
+    {
       "name": "_dsd_gap@main_3",
       "target_path": "build/j/delinks/_dsd_gap@main_3.o",
+      "metadata": {
+        "complete": false,
+        "reverse_fn_order": false,
+        "auto_generated": true
+      }
+    },
+    {
+      "name": "src/scd",
+      "target_path": "build/j/delinks/src/scd.o",
+      "base_path": "build/j/src/scd.o",
+      "metadata": {
+        "complete": true,
+        "reverse_fn_order": false,
+        "source_path": "src/scd.c",
+        "auto_generated": false
+      }
+    },
+    {
+      "name": "_dsd_gap@main_4",
+      "target_path": "build/j/delinks/_dsd_gap@main_4.o",
       "metadata": {
         "complete": false,
         "reverse_fn_order": false,

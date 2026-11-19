@@ -61,4 +61,22 @@ void G3X_Reset(void);   /* 0x021007BC */
 /* --- OS --- */
 void OS_ResetSystem(u32 parameter);  /* 0x02104F78 */
 
+#define OS_IE_V_BLANK 0x1
+
+/* Enable interrupts; returns the previous IME value */
+static inline u16 OS_EnableIrq(void)
+{
+    u16 prev = REG_IME;
+    REG_IME = 1;
+    return prev;
+}
+
+/* Interrupt check flags live at the end of DTCM (NitroSDK layout). */
+extern u8 data_027e0000[];  /* start of DTCM */
+#define OS_SetIrqCheckFlag(mask) \
+    (*(vu32 *)((u32)data_027e0000 + 0x3FF8) |= (mask))
+
+/* --- G3 --- */
+#define G3_SwapBuffers(sort, depth) (REG_SWAP_BUFFERS = ((sort) | (depth)))
+
 #endif /* BHDS_SDK_H */

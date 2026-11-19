@@ -1,11 +1,12 @@
 /*
  * main.c - game entry point and per-frame loop.
  * JP (ABHJ): NitroMain at 0x02000B88.
- * Status: decompiled, NOT yet verified to match (compiler not set up).
+ * Status: matching.
  */
 #include "types.h"
 #include "sdk.h"
 #include "pad.h"
+#include "heap.h"
 #include "game.h"
 
 /* Not yet identified. JP addresses. */
@@ -17,7 +18,6 @@ extern void func_02077760(void); /* first scene */
 extern void func_020777a0(void);
 extern void func_020777dc(void);
 extern void func_02077cd8(void);
-extern void func_02078220(void *arg);
 extern void func_02078344(void); /* game init: power, screens, RNG seed */
 extern void func_02093198(void);
 extern void func_020b82fc(void);
@@ -67,8 +67,8 @@ void NitroMain(void)
             func_02077cd8();
             data_02143640.unk0F = 0;
             data_02143640.unk10 = 0;
-            func_02078220(data_0213ad04);
-            func_02078220(data_0213ad24);
+            Heap_Reset(&gHeapSmall);
+            Heap_Reset(&gHeapMain);
             func_0200653c();
         }
 
