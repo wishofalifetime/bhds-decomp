@@ -5,7 +5,8 @@
 
 /* Main game state. JP: 0x0213AC38 (BSS). Field names are placeholders. */
 typedef struct GameState {
-    /* 0x00 */ u8 unk00[0x0A];
+    /* 0x00 */ u8 unk00[0x09];
+    /* 0x09 */ u8 unk09;       /* nonzero blocks soft reset */
     /* 0x0A */ u8 unk0A;
     /* 0x0B */ u8 unk0B[0xA4 - 0x0B];
     /* 0xA4 */ u16 frameCount;
@@ -33,5 +34,11 @@ extern UnkStruct_02143640 data_02143640;
 /* JP: 0x0213AD04 and 0x0213AD24, types unknown */
 extern u8 data_0213ad04[];
 extern u8 data_0213ad24[];
+
+/* JP addresses */
+void Main_EndFrame(void);         /* 0x02077FE8 */
+void Main_LidSleep(void);         /* 0x0207812C */
+BOOL Main_CheckSoftReset(void);   /* 0x020781E0 */
+void Fade_Update(void);           /* 0x0206FA80 */
 
 #endif /* BHDS_GAME_H */

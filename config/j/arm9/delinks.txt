@@ -1,0 +1,14 @@
+    .text       start:0x02000000 end:0x02118918 kind:code align:32
+    .rodata     start:0x02118918 end:0x0212bef4 kind:rodata align:4
+    .ctor       start:0x0212bef4 end:0x0212bef4 kind:rodata align:4
+    .data       start:0x0212bf00 end:0x02136820 kind:data align:32
+    .bss        start:0x02136820 end:0x0215b740 kind:bss align:32
+
+src/main.c:
+    .text start:0x02000b88 end:0x02000cac
+
+src/pad.c:
+    .text start:0x02073b98 end:0x02073c4c
+
+src/system.c:
+    .text start:0x0207812c end:0x02078220
