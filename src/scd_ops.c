@@ -14,7 +14,7 @@
 #include "scd_data.h"
 
 /* Not yet identified. JP addresses. */
-extern u32 func_020b5534(u8 kind);
+extern u32 Scd_GetRoomModel(u8 kind);
 extern void func_020b641c(u16 id);
 extern void func_020b7e0c(u8 a, s32 b, s32 *pos, s8 c);
 extern void func_020b7e80(u8 a, s32 b, s8 x, s8 angle, s8 c);
@@ -245,7 +245,7 @@ s32 Scd_Op1F(void)
     obj->posZ = obj->initZ;
     obj->unk50 = 0x7FFF;
 
-    id = func_020b5534(obj->kind);
+    id = Scd_GetRoomModel(obj->kind);
     if (id < OBJ_MODEL_COUNT) {
         func_020a00f4(obj, id);
         func_020f7d54(obj->model->unk0C, 0xB);

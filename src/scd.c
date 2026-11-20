@@ -20,10 +20,10 @@ extern void func_020a3040(u32 id, ObjModel *model, Obj *obj);
 extern void func_020f7d54(void *a, u32 b);
 extern void func_020f80b4(void *a, u32 b, float c);
 extern u16 func_020181b8(u32 a, u32 b, u32 c, void *target, s32 *pos, u32 e);
-extern u32 func_020b5404(u8 item);
-extern u32 func_020b5414(u8 item);
-extern u32 func_020b5424(u8 item, u8 *pc);
-extern u32 func_020b5520(u8 item);
+extern u32 Item_GetHeight(u8 item);
+extern u32 Item_GetMarkerId(u8 item);
+extern u32 Item_GetMarker(u8 item, u8 *pc);
+extern u32 Item_GetModel(u8 item);
 
 extern u8 *data_02121f8c[];  /* JP 0x02121F8C: (key, value) pair lists */
 extern u8 data_02121f1c[];   /* JP 0x02121F1C: opcode 0x28 lengths by command */
@@ -98,7 +98,7 @@ void Scd_SetItem(u8 *pc)
     obj->posZ = *(s16 *)(pc + 0x12);
     obj->unk50 = 0x7FFF;
 
-    id = func_020b5520(pc[0xA]);
+    id = Item_GetModel(pc[0xA]);
     if (id < OBJ_MODEL_COUNT) {
         func_020a00f4(obj, id);
         func_020f7d54(obj->model->unk0C, 0xA);
@@ -114,16 +114,16 @@ void Scd_SetItem(u8 *pc)
     }
 
     if (present) {
-        u32 n = func_020b5424(pc[0xA], pc);
+        u32 n = Item_GetMarker(pc[0xA], pc);
 
         if (n < 0x32) {
-            u32 m = func_020b5414(pc[0xA]);
+            u32 m = Item_GetMarkerId(pc[0xA]);
             s16 dy;
 
             if (flags & 0x8000) {
                 dy = -(((flags & 0xF0) >> 4) << 5);
             } else {
-                dy = -(func_020b5404(pc[0xA]) << 5);
+                dy = -(Item_GetHeight(pc[0xA]) << 5);
             }
             if (pc[0xD] == 0xFF) {
                 data_027e0054[0] = 0;

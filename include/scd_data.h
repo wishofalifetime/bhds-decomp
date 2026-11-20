@@ -10,7 +10,8 @@
  */
 
 typedef struct UnkStruct_0213a71c {
-    /* 0x00 */ u8 unk00[0x02];
+    /* 0x00 */ u8 stage;
+    /* 0x01 */ u8 room;
     /* 0x02 */ u8 unk02;         /* saved to unk04 by opcode 0x09, restored by 0x0A */
     /* 0x03 */ u8 unk03;
     /* 0x04 */ u8 unk04;
@@ -129,7 +130,9 @@ typedef struct UnkStruct_02144540 {
     /* 0x86 */ s16 unk86;
     /* 0x88 */ s16 unk88;        /* range-checked by opcode 0x3F */
     /* 0x8A */ s16 unk8A;
-    /* 0x8C */ u8 unk8C[0xDE - 0x8C];
+    /* 0x8C */ u8 unk8C[0xD8 - 0x8C];
+    /* 0xD8 */ s16 unkD8;
+    /* 0xDA */ u8 unkDA[0xDE - 0xDA];
     /* 0xDE */ s16 unkDE;        /* set by 0x41, adjusted by 0x45 */
 } UnkStruct_02144540;
 
@@ -157,13 +160,28 @@ extern UnkEntry_02147d0c data_02147d0c[];  /* JP 0x02147D0C */
 extern UnkStruct_02147640 data_02147640;   /* JP 0x02147640 */
 
 typedef struct UnkStruct_0213b214 {
-    /* 0x00 */ u8 unk00[3];
+    /* 0x00 */ u8 unk00;
+    /* 0x01 */ u8 unk01;
+    /* 0x02 */ u8 unk02;
     /* 0x03 */ u8 unk03;
     /* 0x04 */ u8 unk04[0x94 - 0x04];
     /* 0x94 */ u8 unk94;         /* set by opcode 0x33 cmd 12 */
 } UnkStruct_0213b214;
 
 extern UnkStruct_0213b214 data_0213b214;  /* JP 0x0213B214 */
+
+typedef struct UnkStruct_02144640 {
+    /* 0x00 */ u8 unk00[4];
+    /* 0x04 */ u8 unk04;
+    /* 0x05 */ u8 unk05[0x30 - 0x05];
+    /* 0x30 */ u16 unk30;        /* bits 2-3 cleared by opcode 0x20 */
+    /* 0x32 */ u8 unk32[0xAE - 0x32];
+    /* 0xAE */ u8 unkAE;
+    /* 0xAF */ u8 unkAF[0xE3 - 0xAF];
+    /* 0xE3 */ u8 unkE3;
+} UnkStruct_02144640;
+
+extern UnkStruct_02144640 data_02144640;  /* JP 0x02144640 */
 
 /* Object tables: ids 0x00-0x7F and 0x80-0xBF (64 slots, also used by 0x1F). */
 extern Obj *data_0214c9e8[];  /* JP 0x0214C9E8 */

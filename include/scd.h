@@ -32,8 +32,9 @@ typedef struct ScdTask {
 /* Interpreter state. JP 0x0213D428. Only the fields used so far are known. */
 typedef struct ScdState {
     /* 0x000 */ u8 *pc;          /* current instruction */
-    /* 0x004 */ u8 unk004[0x50 - 0x04];
-    /* 0x050 */ u8 **stackPtr;   /* block stack: end address of each open block */
+    /* 0x004 */ u8 unk004[0x10 - 0x04];
+    /* 0x010 */ u8 *stack[0x10];   /* block stack: end address of each open block */
+    /* 0x050 */ u8 **stackPtr;   /* next free slot in stack */
     /* 0x054 */ u8 unk054[4];
     /* 0x058 */ void *target;      /* set by opcode 0x3D, released by 0x3E */
     /* 0x05C */ u8 unk05C[0x74 - 0x5C];
@@ -54,7 +55,9 @@ typedef struct ScdState {
     /* 0x24F */ u8 testValue;    /* compared by opcode 0x54 */
     /* 0x250 */ u8 unk250[4];
     /* 0x254 */ ScdTask tasks[SCD_TASK_COUNT];
-    /* 0x854 */ u8 unk854[0x8C8 - 0x854];
+    /* 0x854 */ u8 unk854[0x890 - 0x854];
+    /* 0x890 */ s32 savedPos[3];   /* player position, saved each frame */
+    /* 0x89C */ u8 unk89C[0x8C8 - 0x89C];
     /* 0x8C8 */ u8 unk8C8;       /* set by opcode 0x17 */
 } ScdState;
 
@@ -82,6 +85,7 @@ s32 Scd_Step(ScdTask *task);       /* JP 0x020B1A60 */
 s32 Scd_ExecDesc(u8 *pc, ScdOpcodeInfo *info);  /* JP 0x020B1BB8 */
 void Scd_SetItem(u8 *pc);           /* JP 0x020B1C14 */
 s32 Scd_ExecOpcode(u32 op);         /* JP 0x020B3640 */
+void Scd_SetSeq(u8 a, u8 b, u8 c, u8 d);  /* JP 0x020B4C7C */
 u32 Scd_IsSpawned(u8 *insn);        /* JP 0x020B341C */
 
 #endif /* BHDS_SCD_H */

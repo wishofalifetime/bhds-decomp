@@ -36,19 +36,12 @@ extern void func_02017eec(u32 mode, u8 a, u8 b, u32 c, void *target);
 extern void func_02018188(u8 a, u8 b, s16 c, void *target, s32 *pos, u32 e);
 extern s32 func_02059a9c(void *a, u8 b);
 extern void func_02074f1c(u32 a);
-extern void func_020b4c7c(u32 a, u8 b, u32 c, u8 d);
 extern void func_0209f844(Obj *obj, u32 a, void *b, void *c);
 extern void func_01ff8078(void *a, void *b, void *c);  /* ITCM */
 
 typedef void (*ScdEntryFunc)(UnkEntry_02147d0c *entry);
 
-typedef struct UnkStruct_02144640 {
-    /* 0x00 */ u8 unk00[0x30];
-    /* 0x30 */ u16 unk30;        /* bits 2-3 cleared by opcode 0x20 */
-} UnkStruct_02144640;
-
 extern ScdEntryFunc data_02120cec[];        /* JP 0x02120CEC */
-extern UnkStruct_02144640 data_02144640;    /* JP 0x02144640 */
 extern u8 data_027e003c[];                  /* DTCM */
 extern u8 data_027e009c[];                  /* DTCM */
 extern u8 data_027e0148[];                  /* DTCM */
@@ -369,7 +362,7 @@ s32 Scd_Op33(void)
     case 1:
         player->unk96 = pc[2];
         gScd.unk245 = 0;
-        func_020b4c7c(1, 0, 0, 1);
+        Scd_SetSeq(1, 0, 0, 1);
         gScd.unk240 = 0x8000;
         player->unkA2 = 0;
         player->unkA3 = 0;
@@ -412,7 +405,7 @@ s32 Scd_Op33(void)
         player->unkA1 = 0;
         player->unk98 = 3;
         player->unk96 = 0;
-        func_020b4c7c(1, 0, 0, 2);
+        Scd_SetSeq(1, 0, 0, 2);
         gScd.unk240 = 0x8000;
         len = 2;
         break;
@@ -612,7 +605,7 @@ s32 Scd_Op2B(void)
     u8 c = pc[3];
 
     gScd.pc = pc + 4;
-    func_020b4c7c(8, data_02143640.unkFD5, 0, a + 2);
+    Scd_SetSeq(8, data_02143640.unkFD5, 0, a + 2);
     gScd.unk240 = func_02059a9c(&data_02144584, b);
     data_02143640.unkFE6 = c;
     data_02143640.unkFDC = 0;
