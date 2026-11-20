@@ -51,7 +51,7 @@ void SndSe_PauseAll(u32 a)
 }
 
 /* Map the driver's effect state for x to the channel status bits. */
-u32 SndSe_GetPlayState(u32 x)
+u32 SndSe_GetPlayState(u16 x)
 {
     s32 a = func_0200d804(x);
 

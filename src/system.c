@@ -21,7 +21,7 @@ extern void func_020761c4(void);
 extern void func_02077c9c(void);
 extern void func_02077d60(void);
 extern void func_02077e40(void);
-extern void func_020b7ce0(void);
+extern void Snd_StopAll(void);
 extern void func_020d8acc(void);
 extern void func_020d8be0(void);
 extern void func_020f7740(void);
@@ -60,7 +60,7 @@ BOOL Main_CheckSoftReset(void)
 void Main_LidSleep(void)
 {
     if (gPad.lidClosed) {
-        func_020b7ce0();
+        Snd_StopAll();
         func_020d8acc();
         Main_EndFrame();
         GX_DispOff();

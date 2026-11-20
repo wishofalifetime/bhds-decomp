@@ -81,7 +81,7 @@ extern void SndCh_FadeOut(u8 ch, u32 frames);
 extern void SndCh_Stop(u8 ch);
 extern void SndCh_Play(u8 ch, u16 track);
 extern s32 SndCh_GetStatus(u8 ch);
-extern void func_020b7ef8(u32 id);
+extern void Snd_Play6(u32 id);
 extern s8 func_02073c4c(s16 x, s16 z);
 extern void func_02105ca8(const void *src, void *dst, u32 size);  /* probably MI_CpuCopy8 */
 
@@ -124,7 +124,7 @@ void Bgm_PlayRoomSound2(void)
     } else {
         id = data_02123014[data_0213b49c.variant][data_0213a71c.room];
     }
-    func_020b7ef8(id);
+    Snd_Play6(id);
 }
 
 /* Play the room's sound from the stage or variant table. */
@@ -137,7 +137,7 @@ void Bgm_PlayRoomSound(void)
     } else {
         id = data_02123008[data_0213b49c.variant][data_0213a71c.room];
     }
-    func_020b7ef8(id);
+    Snd_Play6(id);
 }
 
 /* Play the stage's sound. */
@@ -182,7 +182,7 @@ void Bgm_PlayStageSound(void)
         id = 1;
         break;
     }
-    func_020b7ef8(id);
+    Snd_Play6(id);
 }
 
 /* Room 0x15 of stages 0 and 5: play sound 2 unless the flags say otherwise. */
@@ -212,7 +212,7 @@ void Bgm_CheckRoom15(void)
             return;
         }
     }
-    func_020b7ef8(2);
+    Snd_Play6(2);
 }
 
 /* Play sound base, adjusted for where the current object stands. */
@@ -225,7 +225,7 @@ void Bgm_PlayAtObject(u8 base)
     } else {
         adjust = 0;
     }
-    func_020b7ef8((u8)(base + (adjust + func_02073c4c(data_027e000c->posX, data_027e000c->posZ))));
+    Snd_Play6((u8)(base + (adjust + func_02073c4c(data_027e000c->posX, data_027e000c->posZ))));
 }
 
 /* Play a jingle: listed tracks on channel 0, others on channel 1. */

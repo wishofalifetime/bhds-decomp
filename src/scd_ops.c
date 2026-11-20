@@ -16,8 +16,8 @@
 /* Not yet identified. JP addresses. */
 extern u32 Scd_GetRoomModel(u8 kind);
 extern void Bgm_PlayJingle(u16 id);
-extern void func_020b7e0c(u8 a, s32 b, s32 *pos, s8 c);
-extern void func_020b7e80(u8 a, s32 b, s8 x, s8 angle, s8 c);
+extern void Snd_PlayAt(u8 a, s32 b, s32 *pos, s8 c);
+extern void Snd_PlayPanned(u8 a, s32 b, s8 x, s8 angle, s8 c);
 extern Obj *func_02053d0c(u8 id);
 extern Obj *func_0205550c(u8 *pc, u8 slot);
 extern s32 func_02074cf0(u8 id);
@@ -29,7 +29,7 @@ extern void func_020f7d54(void *a, u32 b);
 extern void func_020f7f04(void *a, u32 b, u32 c);
 extern void Bgm_RestoreSlots(void);
 extern void Bgm_SaveSlots(void);
-extern void func_020b7cf0(u8 a, s16 b);
+extern void Snd_Stop(u8 a, s16 b);
 extern void func_020a0204(u8 arg);
 extern void func_020a025c(u8 arg);
 extern void func_02087380(void);
@@ -447,7 +447,7 @@ s32 Scd_Op58(void)
     s16 value = Scd_LookupPair(a, pc[2]);
 
     gScd.pc += 4;
-    func_020b7cf0(a, value);
+    Snd_Stop(a, value);
     return TRUE;
 }
 

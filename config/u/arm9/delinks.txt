@@ -78,3 +78,7 @@ src/sndse.c:
 src/sndse2.c:
     complete
     .text start:0x020b7db8 end:0x020b7fd4
+
+src/sndplay.c:
+    complete
+    .text start:0x020b7fd4 end:0x020b8374

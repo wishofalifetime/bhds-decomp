@@ -12,8 +12,8 @@
 #include "obj.h"
 
 /* Not yet identified. JP addresses. */
-extern void func_020b7e0c(u8 a, s32 b, s32 *pos, s8 c);
-extern void func_020b7e80(u8 a, s32 b, s8 x, s8 angle, s8 c);
+extern void Snd_PlayAt(u8 a, s32 b, s32 *pos, s8 c);
+extern void Snd_PlayPanned(u8 a, s32 b, s8 x, s8 angle, s8 c);
 extern Obj *func_02053d0c(u8 id);
 
 extern s32 data_027e0054[3];  /* DTCM: position scratch */
@@ -52,10 +52,10 @@ s32 Scd_Op17(void)
     case 3: {
         s8 x = *(s16 *)(pc + 6);
         s8 angle = *(s16 *)(pc + 8);
-        func_020b7e80(a, b, x, angle + 0x40, (s8)pc[4]);
+        Snd_PlayPanned(a, b, x, angle + 0x40, (s8)pc[4]);
         return TRUE;
     }
     }
-    func_020b7e0c(a, b, data_027e0054, (s8)pc[4]);
+    Snd_PlayAt(a, b, data_027e0054, (s8)pc[4]);
     return TRUE;
 }

@@ -38,7 +38,7 @@ extern BOOL func_02088388(void);
 extern u8 func_020883b4(void);
 extern u16 func_0201896c(u32 a, u32 b);
 extern void func_020b8028(u32 slot, u32 id);
-extern void func_020b7e0c(u8 a, s32 b, s32 *pos, s8 c);
+extern void Snd_PlayAt(u8 a, s32 b, s32 *pos, s8 c);
 extern void func_02105c14(void *dst, u32 value, u32 size);  /* probably MI_CpuFill8 */
 
 extern SndBankState data_0213a900;          /* JP 0x0213A900 */
@@ -171,7 +171,7 @@ void SndBank_LoadAll(void)
         data_027e0054[0] = data_02143640.unkF74[0];
         data_027e0054[1] = data_02143640.unkF74[1];
         data_027e0054[2] = data_02143640.unkF74[2];
-        func_020b7e0c(6, 2, data_027e0054, 0);
+        Snd_PlayAt(6, 2, data_027e0054, 0);
     }
 }
 
