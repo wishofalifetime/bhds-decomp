@@ -69,4 +69,12 @@ src/sndstrm_load.c:
 
 src/sndch.c:
     complete
-    .text start:0x020b7178 end:0x020b7680
+    .text start:0x020b7178 end:0x020b77c8
+
+src/sndse.c:
+    complete
+    .text start:0x020b77c8 end:0x020b79b4
+
+src/sndse2.c:
+    complete
+    .text start:0x020b79b4 end:0x020b7bd0

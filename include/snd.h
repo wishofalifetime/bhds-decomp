@@ -17,8 +17,9 @@ typedef struct SndChannel {
 } SndChannel;
 
 typedef struct SndStream {
-    /* 0x000 */ u8 unk000[0xE4];
-    /* 0x0E4 */ SndChannel chan[4];
+    /* 0x000 */ u8 unk000[0xA8];
+    /* 0x0A8 */ SndChannel se[5];      /* sound effects */
+    /* 0x0E4 */ SndChannel chan[4];    /* music */
     /* 0x114 */ u8 state;       /* 1: loaded, 2: started, 3: playing */
     /* 0x115 */ u8 delay;       /* frames before playback is tracked */
     /* 0x116 */ s16 target;     /* position at which the stream counts as playing */
@@ -48,5 +49,9 @@ void SndCh_StopAll(void);             /* JP 0x020B7410 */
 void SndCh_Stop(u32 ch);              /* JP 0x020B7480 */
 void SndCh_SetVolume(u32 ch, u8 volume);  /* JP 0x020B7360 */
 void SndCh_SetPan(u32 ch, u8 pan);    /* JP 0x020B7314 */
+u32 Snd_GetPlayState(u16 id);         /* JP 0x020B75E8 */
+
+/* sndse.c */
+void SndSe_Free(s32 i);               /* JP 0x020B79E4 */
 
 #endif /* BHDS_SND_H */

@@ -20,7 +20,7 @@ extern void func_0200d380(u32 a);
 extern BOOL func_0200d38c(void);
 extern void func_0200d3b0(u32 a);
 extern u32 func_0200d958(u32 id, u32 kind);
-extern void func_020b79b4(void);
+extern void SndSe_StopAll(void);
 extern void func_020b7f70(void);
 extern void func_020b8028(u32 slot, u32 id);
 extern void func_020b82cc(void *data);
@@ -151,6 +151,6 @@ void Snd_Init(void)
 {
     SndStrm_Reset();
     SndCh_StopAll();
-    func_020b79b4();
+    SndSe_StopAll();
     func_020b7f70();
 }

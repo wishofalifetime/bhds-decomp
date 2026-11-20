@@ -1,6 +1,6 @@
 /*
  * sndch.c - the four sound channels.
- * JP (ABHJ) 0x020B7178 - 0x020B7680.
+ * JP (ABHJ) 0x020B7178 - 0x020B77C8.
  *
  * Functions are defined in reverse address order (mwccarm emits functions
  * in reverse source order).
@@ -36,14 +36,55 @@ extern void func_0200d4ac(u16 id, u32 a, u32 b, u32 c, u32 d);
 extern void func_0200d4e8(u16 ch);
 extern void func_0200d4f4(u16 ch, void *buf, s32 size, u32 a, u32 b);
 extern void func_0200d514(u16 id, u32 volume, u16 frames);
-extern s32 func_0200d54c(u32 x);
-extern s32 func_0200d558(u32 x);
+extern s32 func_0200d54c(u16 x);
+extern s32 func_0200d558(u16 x);
 extern SndHeader *func_0200da8c(u32 id);
 
 extern SndEffectOut data_0213a900;          /* JP 0x0213A900 */
 
+/* Advance each music channel's status as its sound plays out. */
+void SndCh_Update(void)
+{
+    u32 i;
+
+    for (i = 0; i < 4; i++) {
+        SndChannel *c = &data_0213a548.chan[i];
+
+        switch (c->status) {
+        case 1:
+        case 4:
+            if (Snd_GetPlayState(c->id) == 0) {
+                func_0200d4e8(i);
+                if (c->buf != NULL) {
+                    func_020b82cc(c->buf);
+                    c->buf = NULL;
+                }
+                c->id = 0;
+                c->status = 0;
+            }
+            break;
+        case 0x10:
+            if (func_0200d54c(c->id) == 2) {
+                c->status = 0x20;
+            }
+            break;
+        case 0x20:
+            if (func_0200d54c(c->id) == 3) {
+                func_0200d47c(c->id);
+                c->status = 0x40;
+            }
+            break;
+        case 0x80:
+            if (Snd_GetPlayState(c->id) == 1) {
+                c->status = 1;
+            }
+            break;
+        }
+    }
+}
+
 /* Map the driver's state for x to this game's channel status bits. */
-u32 Snd_GetPlayState(u32 x)
+u32 Snd_GetPlayState(u16 x)
 {
     s32 a = func_0200d558(x);
 
