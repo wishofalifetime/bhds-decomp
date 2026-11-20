@@ -112,3 +112,10 @@ src/itemstack.c:
 src/invuse.c:
     complete
     .text start:0x020b9ec0 end:0x020ba5b4
+
+src/enemy.c:
+    complete
+    .text start:0x020ba5b4 end:0x020baa74
+
+src/enemy_turn.c:
+    .text start:0x020baa74 end:0x020bac80

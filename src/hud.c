@@ -8,24 +8,7 @@
 #include "types.h"
 #include "game.h"
 #include "scd_data.h"
-
-/* NitroSDK MATHRandContext32 */
-typedef struct MATHRandContext32 {
-    u64 x;
-    u64 mul;
-    u64 add;
-} MATHRandContext32;
-
-/* NitroSDK MATH_Rand32 */
-static inline u32 MATH_Rand32(MATHRandContext32 *context, u32 max)
-{
-    context->x = context->mul * context->x + context->add;
-    if (max == 0) {
-        return (u32)(context->x >> 32);
-    } else {
-        return (u32)(((context->x >> 32) * max) >> 32);
-    }
-}
+#include "mathrand.h"
 
 /* A 2D sprite drawn through the 3D engine (see hudwave.c). 0x44 bytes. */
 typedef struct HudSprite {
@@ -87,7 +70,6 @@ extern void Hud_DrawSprite(HudSprite *sprite);
 extern HudState data_0213a680;            /* JP 0x0213A680 */
 extern VoidFunc data_02123f8c[];          /* JP 0x02123F8C: by mode */
 extern u8 data_02123f94[];                /* JP 0x02123F94 */
-extern MATHRandContext32 data_027e0064;   /* DTCM */
 extern u8 data_02123f7c[];                /* JP 0x02123F7C: frame texture by data_0213a6cc.unk03 */
 
 typedef struct UnkStruct_0213a6cc {

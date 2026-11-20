@@ -100,6 +100,20 @@ typedef struct RoomGroupTable {
     /* 0x04 */ RoomGroupItem *groups[5];
 } RoomGroupTable; /* RoomGroupItem data follows */
 
+/* A rectangle on the floor plan. */
+typedef struct RoomRect {
+    /* 0x00 */ u16 x0;
+    /* 0x02 */ u16 z0;
+    /* 0x04 */ u16 x1;
+    /* 0x06 */ u16 z1;
+} RoomRect;
+
+typedef struct RoomZone {
+    /* 0x00 */ u16 unk00;
+    /* 0x02 */ RoomRect rect;
+    /* 0x0A */ u16 unk0A;
+} RoomZone; /* size 0xC */
+
 typedef struct RoomData {
     /* 0x00 */ u8 count;         /* entries in data_02143640.unkA8 to scan */
     /* 0x01 */ u8 unk01;
@@ -110,7 +124,8 @@ typedef struct RoomData {
     /* 0x0C */ RoomPoint points[3];
     /* 0x48 */ struct RoomLink *links;  /* 0x14-byte entries, set by opcode 0x3A */
     /* 0x4C */ struct RoomGroupTable *groups;  /* set by opcode 0x30 */
-    /* 0x50 */ u8 unk50[0x70 - 0x50];
+    /* 0x50 */ struct RoomZone *zones;  /* 0xC-byte entries */
+    /* 0x54 */ u8 unk54[0x70 - 0x54];
     /* 0x70 */ RoomArea areas[1]; /* real length unknown */
 } RoomData;
 
