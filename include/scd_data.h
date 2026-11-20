@@ -157,7 +157,7 @@ typedef struct UnkEntry_02147d0c {
 typedef struct UnkStruct_02147640 {
     /* 0x000 */ u8 unk000[0x538];
     /* 0x538 */ u8 (*unk538)[2]; /* (type, value) pairs */
-    /* 0x53C */ u8 unk53C[4];
+    /* 0x53C */ u8 *unk53C;
     /* 0x540 */ u8 unk540;        /* number of unk538 pairs */
     /* 0x541 */ u8 unk541[0x84C - 0x541];
     /* 0x84C */ UnkEntry_02147d0c *lastEntry;  /* highest data_02147d0c entry used */

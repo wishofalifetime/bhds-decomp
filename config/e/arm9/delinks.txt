@@ -55,3 +55,7 @@ src/coll.c:
 src/bgm.c:
     complete
     .text start:0x020b62c4 end:0x020b6e80
+
+src/sndbank.c:
+    complete
+    .text start:0x020b6e80 end:0x020b72fc
