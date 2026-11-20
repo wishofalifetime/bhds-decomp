@@ -15,7 +15,7 @@
 
 /* Not yet identified. JP addresses. */
 extern u32 Scd_GetRoomModel(u8 kind);
-extern void func_020b641c(u16 id);
+extern void Bgm_PlayJingle(u16 id);
 extern void func_020b7e0c(u8 a, s32 b, s32 *pos, s8 c);
 extern void func_020b7e80(u8 a, s32 b, s8 x, s8 angle, s8 c);
 extern Obj *func_02053d0c(u8 id);
@@ -175,7 +175,7 @@ s32 Scd_Op1C(void)
     return TRUE;
 }
 
-/* 0x1E ?, a, idx: func_020b641c(a + data_02122084[idx]). */
+/* 0x1E ?, a, idx: Bgm_PlayJingle(a + data_02122084[idx]). */
 s32 Scd_Op1E(void)
 {
     u8 *pc;
@@ -188,7 +188,7 @@ s32 Scd_Op1E(void)
     a = pc[2];
     gScd.pc = pc + 4;
     b = data_02122084[idx];
-    func_020b641c(a + b);
+    Bgm_PlayJingle(a + b);
     return TRUE;
 }
 

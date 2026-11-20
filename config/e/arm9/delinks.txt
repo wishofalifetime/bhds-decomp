@@ -54,4 +54,4 @@ src/coll.c:
 
 src/bgm.c:
     complete
-    .text start:0x020b62c4 end:0x020b692c
+    .text start:0x020b62c4 end:0x020b6e80

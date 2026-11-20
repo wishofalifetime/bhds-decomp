@@ -1,6 +1,6 @@
 /*
  * bgm.c - background music selection.
- * JP (ABHJ) 0x020B5B9C - 0x020B6204.
+ * JP (ABHJ) 0x020B5B9C - 0x020B6758.
  *
  * Two music channels follow a requested track id: a change fades the old
  * track out before the new one starts, and the volume follows the room.
@@ -11,6 +11,7 @@
 #include "types.h"
 #include "game.h"
 #include "scd_data.h"
+#include "obj.h"
 
 typedef struct BgmChannel {
     /* 0x00 */ u8 state;        /* 0: playing, 1: fading out, 2: start the request */
@@ -53,6 +54,18 @@ typedef struct UnkStruct_0214c640 {
     /* 0x3F4 */ u8 unk3F4;
 } UnkStruct_0214c640;
 
+typedef struct UnkStruct_0213a6cc {
+    /* 0x00 */ u8 unk00[4];
+    /* 0x04 */ u8 unk04;
+} UnkStruct_0213a6cc;
+
+typedef struct UnkStruct_0213b49c {
+    /* 0x000 */ u8 unk000[0x1FC];
+    /* 0x1FC */ u32 unk1FC_0 : 1;
+                u32 notify : 1;
+                u32 variant : 2;   /* replaces the stage when data_0213a6cc.unk04 is set */
+} UnkStruct_0213b49c;
+
 /* Stage and room of data_0213a71c as one value: room << 8 | stage. */
 #define CUR_STAGE_ROOM (*(u16 *)&data_0213a71c)
 
@@ -68,6 +81,9 @@ extern void func_020b73cc(u8 ch, u32 frames);
 extern void func_020b7480(u8 ch);
 extern void func_020b74f8(u8 ch, u16 track);
 extern s32 func_020b75d0(u8 ch);
+extern void func_020b7ef8(u32 id);
+extern s8 func_02073c4c(s16 x, s16 z);
+extern void func_02105ca8(const void *src, void *dst, u32 size);  /* probably MI_CpuCopy8 */
 
 extern BgmState data_0213a900;              /* JP 0x0213A900 */
 extern UnkStruct_0213b414 data_0213b414;    /* JP 0x0213B414 */
@@ -75,12 +91,251 @@ extern u32 data_0213b7a4[];                 /* JP 0x0213B7A4: flags */
 extern UnkStruct_0214c640 data_0214c640;    /* JP 0x0214C640 */
 extern u8 data_0214ca5c[];                  /* JP 0x0214CA5C */
 extern u8 data_02122a9c[][0x10];            /* JP 0x02122A9C */
+extern UnkStruct_0213a6cc data_0213a6cc;    /* JP 0x0213A6CC */
+extern UnkStruct_0213b49c data_0213b49c;    /* JP 0x0213B49C */
+extern u32 data_0213b764[];                 /* JP 0x0213B764: flags */
+extern u32 data_0213b80c[];                 /* JP 0x0213B80C: flags */
+extern u8 data_0213b8ce[][0x20];            /* JP 0x0213B8CE: slot setup by stage, room */
+extern u16 data_02122a7c[];                 /* JP 0x02122A7C: tracks played on channel 0, 0-terminated */
+extern u8 data_02122aec[][3];               /* JP 0x02122AEC: slot tracks */
+extern const u8 data_02122b9c[];            /* JP 0x02122B9C: initial data_0213b8ce */
+extern u8 data_02122c7c[][0x20][4];         /* JP 0x02122C7C: slot track sets by stage, room */
+extern u16 *data_02123008[];                /* JP 0x02123008: by variant, then room */
+extern u16 *data_02123014[];                /* JP 0x02123014: by variant, then room */
+extern u16 *data_02123048[];                /* JP 0x02123048: by stage, then room */
+extern u16 *data_02123064[];                /* JP 0x02123064: by stage, then room */
+extern Obj *data_027e000c;                  /* DTCM: current object */
 
 void Bgm_ClearSlots(void);
 void Bgm_ClearSlot(u32 i);
 void Bgm_SetSlots(u32 bits);
 void Bgm_SetSlot(u32 i);
 void Bgm_UpdateChannel(BgmChannel *c, u8 ch, u16 req);
+void Bgm_SetSlotTracks(u32 n);
+void Bgm_ApplySlot(u32 bits, u32 i);
+
+/* Play the room's second sound from the stage or variant table. */
+void Bgm_PlayRoomSound2(void)
+{
+    u16 id;
+
+    if (data_0213a6cc.unk04 == 0) {
+        id = data_02123064[data_0213a71c.stage][data_0213a71c.room];
+    } else {
+        id = data_02123014[data_0213b49c.variant][data_0213a71c.room];
+    }
+    func_020b7ef8(id);
+}
+
+/* Play the room's sound from the stage or variant table. */
+void Bgm_PlayRoomSound(void)
+{
+    u16 id;
+
+    if (data_0213a6cc.unk04 == 0) {
+        id = data_02123048[data_0213a71c.stage][data_0213a71c.room];
+    } else {
+        id = data_02123008[data_0213b49c.variant][data_0213a71c.room];
+    }
+    func_020b7ef8(id);
+}
+
+/* Play the stage's sound. */
+void Bgm_PlayStageSound(void)
+{
+    u32 id;
+
+    switch (data_0213a71c.stage) {
+    case 5:
+        if (data_0213a71c.room == 0x10) {
+            id = 0x39;
+            break;
+        }
+    case 0:
+        id = 0xC;
+        break;
+    case 1:
+    case 6:
+        if (data_0213a71c.room == 0x1B || data_0213a71c.room == 6) {
+            id = 0x39;
+        } else {
+            id = 0xC;
+        }
+        break;
+    case 4:
+    case 0x11:
+        id = 0x8D;
+        break;
+    case 2:
+    case 3:
+    case 7:
+    case 8:
+    case 9:
+    case 0xA:
+    case 0xB:
+    case 0xC:
+    case 0xD:
+    case 0xE:
+    case 0xF:
+    case 0x10:
+    default:
+        id = 1;
+        break;
+    }
+    func_020b7ef8(id);
+}
+
+/* Room 0x15 of stages 0 and 5: play sound 2 unless the flags say otherwise. */
+void Bgm_CheckRoom15(void)
+{
+    if (data_0213a71c.room != 0x15) {
+        return;
+    }
+    if (data_0213a71c.stage != 0 && data_0213a71c.stage != 5) {
+        return;
+    }
+    if (Flag_Test(data_0213b80c, 0)) {
+        return;
+    }
+    if (Flag_Test(data_0213b80c, 1)) {
+        return;
+    }
+    if (data_02143640.unkF4D == 0) {
+        if (Flag_Test(data_0213b764, 0x20)) {
+            return;
+        }
+    } else if (Flag_Test(data_0213b764, 0x29)) {
+        if (Flag_Test(data_0213b764, 7)) {
+            return;
+        }
+        if (Flag_Test(data_0213b764, 0x5F)) {
+            return;
+        }
+    }
+    func_020b7ef8(2);
+}
+
+/* Play sound base, adjusted for where the current object stands. */
+void Bgm_PlayAtObject(u8 base)
+{
+    s32 adjust;
+
+    if (data_0213b750.flags2 & 1) {
+        adjust = -3;
+    } else {
+        adjust = 0;
+    }
+    func_020b7ef8((u8)(base + (adjust + func_02073c4c(data_027e000c->posX, data_027e000c->posZ))));
+}
+
+/* Play a jingle: listed tracks on channel 0, others on channel 1. */
+void Bgm_PlayJingle(u16 track)
+{
+    u16 *p = data_02122a7c;
+    u8 ch = 1;
+    u16 t;
+
+    while (1) {
+        t = *p++;
+        if (t == 0) {
+            break;
+        }
+        if (t == track) {
+            ch = 0;
+            break;
+        }
+    }
+    func_020b74f8(ch, track);
+    data_0213b750.flags |= 0x20000;
+}
+
+void Bgm_StopJingle(void)
+{
+    func_020b7480(0);
+    func_020b7480(1);
+    data_0213b750.flags &= ~0x20000;
+}
+
+/* Clear the jingle flag once both channels are idle. */
+void Bgm_UpdateJingle(void)
+{
+    if (data_0213b750.flags & 0x20000) {
+        s32 a = func_020b75d0(1);
+        s32 b = func_020b75d0(0);
+
+        if (a == 0 && b == 0) {
+            data_0213b750.flags &= ~0x20000;
+        }
+    }
+}
+
+void Bgm_ResetRoomTable(void)
+{
+    func_02105ca8(data_02122b9c, data_0213b8ce, 0xE0);
+}
+
+/* Load the three slot tracks from set n (0xFF: set 0x39). */
+void Bgm_SetSlotTracks(u32 n)
+{
+    u8 *src;
+    u32 i;
+
+    if (n == 0xFF) {
+        n = 0x39;
+    }
+    src = data_02122aec[n];
+    for (i = 0; i < 3; i++) {
+        data_0213a900.slots[i].track = src[i];
+    }
+}
+
+/* Set up the music slots for the current room. */
+void Bgm_InitRoom(void)
+{
+    u8 set;
+    u8 room;
+    u8 cfg;
+
+    if (data_0213a6cc.unk04 == 0) {
+        set = data_0213a71c.stage;
+    } else {
+        set = data_0213b49c.variant;
+        if (set != 0) {
+            set += 2;
+        }
+    }
+    room = data_0213a71c.room;
+    data_0213a900.unk1D = data_0213b8ce[set][room];
+    cfg = data_0213a900.unk1D;
+    if (cfg == 0xFF) {
+        Bgm_ClearSlots();
+        data_0213a900.slotMask = 0xFF;
+    } else {
+        Bgm_SetSlotTracks(data_02122c7c[set][room][cfg & 3]);
+        switch (cfg >> 6) {
+        case 0:
+            Bgm_ApplySlot(cfg, 0);
+            Bgm_ApplySlot(cfg, 1);
+            Bgm_ApplySlot(cfg, 2);
+            break;
+        case 1:
+            Bgm_ClearSlots();
+            break;
+        }
+        data_0213a900.slotMask = cfg;
+    }
+}
+
+/* Turn slot i on or off from bit i + 3 of bits. */
+void Bgm_ApplySlot(u32 bits, u32 i)
+{
+    if (bits & (1 << (i + 3))) {
+        Bgm_SetSlot(i);
+    } else {
+        Bgm_ClearSlot(i);
+    }
+}
+
 
 /* Push the slot mask into the high byte and clear every slot. */
 void Bgm_SaveSlots(void)

@@ -46,7 +46,9 @@ typedef struct UnkStruct_02143640 {
     /* 0x0A8 */ UnkGroupEntry unkA8[64];  /* real length unknown */
     /* 0xEA8 */ u8 unkEA8[0xF4A - 0xEA8];
     /* 0xF4A */ u8 unkF4A;       /* set by opcode 0x33 cmd 11 */
-    /* 0xF4B */ u8 unkF4B[0xF74 - 0xF4B];
+    /* 0xF4B */ u8 unkF4B[0xF4D - 0xF4B];
+    /* 0xF4D */ u8 unkF4D;
+    /* 0xF4E */ u8 unkF4E[0xF74 - 0xF4E];
     /* 0xF74 */ s32 unkF74[3];  /* a position, copied by script opcode 0x17 */
     /* 0xF80 */ u8 unkF80[0xFD5 - 0xF80];
     /* 0xFD5 */ u8 unkFD5;       /* passed on by opcode 0x2B */
