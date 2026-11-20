@@ -1,6 +1,6 @@
 /*
  * sndbank.c - sound bank lists for the current room.
- * JP (ABHJ) 0x020B6758 - 0x020B6BD4.
+ * JP (ABHJ) 0x020B6758 - 0x020B6E48.
  *
  * The room's banks are collected into two zero-terminated id lists in the
  * music state and then loaded.
@@ -39,6 +39,7 @@ extern u8 func_020883b4(void);
 extern u16 func_0201896c(u32 a, u32 b);
 extern void func_020b8028(u32 slot, u32 id);
 extern void func_020b7e0c(u8 a, s32 b, s32 *pos, s8 c);
+extern void func_02105c14(void *dst, u32 value, u32 size);  /* probably MI_CpuFill8 */
 
 extern SndBankState data_0213a900;          /* JP 0x0213A900 */
 extern UnkStruct_0213a6cc data_0213a6cc;    /* JP 0x0213A6CC */
@@ -50,8 +51,93 @@ extern u8 data_02123080[];                  /* JP 0x02123080 */
 extern u8 data_021230a0[];                  /* JP 0x021230A0 */
 extern u8 data_02123304[][0x20];            /* JP 0x02123304: by stage (or 7 + variant), room */
 extern s32 data_027e0054[3];                /* DTCM: position scratch */
+extern u16 data_021230e4[];                 /* JP 0x021230E4: by unkF4D, alternate room */
+extern u8 **data_021232bc[];                /* JP 0x021232BC: 0-terminated lists by stage, room */
+extern u8 *data_02123dcc[];                 /* JP 0x02123DCC: 0-terminated lists by room */
 
 u8 SndBank_IsAltRoom(void);
+void SndBank_Add(u8 id);
+void SndBank_LoadExtra(void);
+void SndBank_LoadAll(void);
+
+void SndBank_Clear(void)
+{
+    func_02105c14(data_0213a900.banks, 0, 0x10);
+    func_02105c14(data_0213a900.banks2, 0, 0xC);
+}
+
+/* Collect and load every bank the current room needs. */
+void SndBank_LoadRoom(void)
+{
+    u8 *p;
+    u32 i;
+
+    SndBank_LoadExtra();
+    SndBank_Add(data_021230e4[SndBank_IsAltRoom() + data_02143640.unkF4D * 2]);
+    SndBank_Add((u16)(func_02088388() ? 0xB7 : 0xA));
+    if (data_0213a6cc.unk04 != 0) {
+        SndBank_Add(0x21);
+    }
+    if (func_02088388()) {
+        SndBank_Add(1);
+    } else {
+        p = data_021232bc[data_0213a71c.stage][data_0213a71c.room];
+        while (*p != 0) {
+            SndBank_Add(*p++);
+        }
+    }
+    if (data_0213a6cc.unk04 != 0) {
+        switch (data_0213b49c.variant) {
+        case 0:
+            switch (data_0213a71c.room) {
+            case 6:
+            case 0xB:
+            case 0x11:
+                SndBank_Add(0x77);
+                break;
+            case 0x19:
+                p = data_02123dcc[data_0213a71c.room];
+                while (*p != 0) {
+                    SndBank_Add(*p++);
+                }
+                break;
+            }
+            break;
+        case 1:
+            switch (data_0213a71c.room) {
+            case 0:
+                SndBank_Add(0x6E);
+                SndBank_Add(0x8E);
+                break;
+            case 9:
+                SndBank_Add(0x77);
+                break;
+            }
+            break;
+        case 2:
+            switch (data_0213a71c.room) {
+            case 7:
+            case 9:
+            case 0xB:
+                SndBank_Add(0x77);
+                break;
+            case 8:
+                SndBank_Add(0x6D);
+                break;
+            }
+            break;
+        }
+    }
+    for (i = 0; i < 0xC; i++) {
+        u32 id = data_0213a900.banks2[i];
+
+        if (id == 0) {
+            break;
+        }
+        SndBank_Add(id);
+    }
+    SndBank_LoadAll();
+}
 u32 SndBank_GetA(u32 n);
 u32 SndBank_GetB(u32 n);
 void SndBank_GetSpecial(u32 n, u32 b, u16 *out);

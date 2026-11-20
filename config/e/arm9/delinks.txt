@@ -58,4 +58,8 @@ src/bgm.c:
 
 src/sndbank.c:
     complete
-    .text start:0x020b6e80 end:0x020b72fc
+    .text start:0x020b6e80 end:0x020b7570
+
+src/sndstrm.c:
+    complete
+    .text start:0x020b7570 end:0x020b7770
