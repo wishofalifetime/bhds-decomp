@@ -77,7 +77,13 @@ BOOL Scd_CanRunActor(ActorFlags *actor)
 /* Default run condition. */
 BOOL Scd_CanRunDefault(void *target)
 {
-    return func_020707e8(0) && gScd.unk247 == 0;
+    if (func_020707e8(0) == FALSE) {
+        return FALSE;
+    }
+    if (gScd.unk247 != 0) {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 /* Run every task whose condition allows it, then free it. */
