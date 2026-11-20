@@ -87,10 +87,16 @@ typedef struct RoomGroupItem {
     /* 0x0A */ u16 flags;        /* bits 8-11 set by opcode 0x30 */
 } RoomGroupItem; /* size 0xC */
 
+/*
+ * Collision boxes of a room, split into 4 groups. In the room file
+ * groups[0] is the total and groups[1..4] are counts; Coll_InitRoom turns
+ * them into pointers, so group i runs from groups[i] to groups[i + 1].
+ */
 typedef struct RoomGroupTable {
-    /* 0x00 */ u32 unk00;
-    /* 0x04 */ RoomGroupItem *groups[1];  /* real length unknown */
-} RoomGroupTable;
+    /* 0x00 */ s16 unk00;
+    /* 0x02 */ s16 unk02;
+    /* 0x04 */ RoomGroupItem *groups[5];
+} RoomGroupTable; /* RoomGroupItem data follows */
 
 typedef struct RoomData {
     /* 0x00 */ u8 count;         /* entries in data_02143640.unkA8 to scan */

@@ -54,7 +54,9 @@ typedef struct Obj {
     /* 0xAC */ s16 unkAC;
     /* 0xAE */ u8 unkAE[2];
     /* 0xB0 */ void *parent;
-    /* 0xB4 */ u8 unkB4[0xEC - 0xB4];
+    /* 0xB4 */ u8 unkB4[0xC0 - 0xB4];
+    /* 0xC0 */ u8 unkC0;         /* bit 3 set by collision handler 4 */
+    /* 0xC1 */ u8 unkC1[0xEC - 0xC1];
     /* 0xEC */ u16 unkEC;        /* bits 2-3 cleared by opcode 0x21 */
 } Obj;
 

@@ -47,3 +47,7 @@ src/scd_rotnode.c:
 src/scd_task.c:
     complete
     .text start:0x020b52a0 end:0x020b5968
+
+src/coll.c:
+    complete
+    .text start:0x020b5968 end:0x020b5fa0
