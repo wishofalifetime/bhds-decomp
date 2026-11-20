@@ -37,6 +37,13 @@ src/scd_flow.c:
 src/scd_ops2.c:
     .text start:0x020b3de8 end:0x020b5350
 
+src/scd_rot.c:
+    complete
+    .text start:0x020b5350 end:0x020b5514
+
+src/scd_rotnode.c:
+    .text start:0x020b5514 end:0x020b55c4
+
 src/scd_task.c:
     complete
     .text start:0x020b55c4 end:0x020b5c8c
