@@ -1,6 +1,6 @@
 /*
  * invuse.c - inventory: combining two items and using healing items.
- * JP (ABHJ) 0x020B9ABC - 0x020BA008.
+ * JP (ABHJ) 0x020B9ABC - 0x020BA1B0.
  *
  * Functions are defined in reverse address order (mwccarm emits functions
  * in reverse source order).
@@ -56,6 +56,7 @@ typedef struct UnkStruct_0213b49c {
                 u32 notify : 1;
 } UnkStruct_0213b49c;
 
+typedef BOOL (*BOOLFunc)(void);
 typedef void (*CombineFunc)(ItemSlot *a, ItemSlot *b);
 
 #define INV_WORK ((InvWork *)data_0213b214.work)
@@ -64,7 +65,6 @@ typedef void (*CombineFunc)(ItemSlot *a, ItemSlot *b);
 /* Not yet identified. JP addresses. */
 extern s32 func_02070d2c(u8 a);
 extern void func_020ad2e4(s16 health);
-extern BOOL func_020ba008(void);
 extern void Hud_SetMode(u32 kind);
 extern void Snd_Play0(u32 id);
 
@@ -74,6 +74,10 @@ extern u8 data_0211d684[];                /* JP 0x0211D684: healing item effects
 extern u16 data_0211dafc[];               /* JP 0x0211DAFC: heal percentage */
 extern CombineFunc data_021241d8[];       /* JP 0x021241D8: combine handlers by kind */
 extern VoidFunc data_021241c8[];          /* JP 0x021241C8: inventory handlers by state */
+extern VoidFunc data_021241d0[];          /* JP 0x021241D0: item use handlers by state */
+extern BOOLFunc data_021241f8[];          /* JP 0x021241F8: item use handlers by item range */
+extern u8 data_0211d678[];                /* JP 0x0211D678: first item id of each range */
+extern u32 data_0213d48c[];               /* JP 0x0213D48C: key item flags */
 extern UnkStruct_0213a6cc data_0213a6cc;  /* JP 0x0213A6CC */
 extern UnkStruct_0213b49c data_0213b49c;  /* JP 0x0213B49C */
 extern u32 data_0213b764[];               /* JP 0x0213B764: flags */
@@ -81,12 +85,66 @@ extern u32 data_0213b764[];               /* JP 0x0213B764: flags */
 u32 Inv_CheckCombine(void);
 void Inv_SetUsedItem(void);
 
+void Inv_UseUpdate(void)
+{
+    data_021241d0[INV_WORK->state]();
+}
+
+/* Use the selected item; consume one if the handler for its range accepts it. */
+void Inv_Use(void)
+{
+    u8 i;
+    u32 slot;
+
+    INV_WORK->state = 1;
+    slot = INV_WORK->slotA;
+    for (i = 9; data_0213b214.itemId < data_0211d678[i]; i--) {
+    }
+    if (data_021241f8[i]()) {
+        if (INV_SLOTS[slot].count != 0) {
+            u8 *p = &INV_SLOTS->count;
+            p[slot * 2]--;
+            if (INV_SLOTS[slot].count == 0) {
+                INV_SLOTS[slot].id = 0;
+                data_0213b214.itemId = 0;
+            }
+        }
+    } else {
+        INV_WORK->message = i + 0x76;
+    }
+}
+
+void Inv_Close(void)
+{
+    if (data_0213a71c.unk05 & 0x80) {
+        return;
+    }
+    data_0213b214.unk279 |= 2;
+    INV_WORK->unk10 = 0;
+}
+
+BOOL Inv_ReturnFalse(void)
+{
+    return FALSE;
+}
+
+/* Use a key item: allowed only if its flag is set. */
+BOOL Inv_UseKeyItem(void)
+{
+    if (!Flag_Test(data_0213d48c, data_0213b214.itemId - 0x1B)) {
+        return FALSE;
+    }
+    data_0213a71c.unk12 = data_0213b214.itemId;
+    data_0213b214.unk279 |= 0x80;
+    return TRUE;
+}
+
 BOOL Inv_UseItem3E(void)
 {
     if (data_0213b214.itemId != 0x3E) {
         return FALSE;
     }
-    return func_020ba008();
+    return Inv_UseKeyItem();
 }
 
 /* Use a healing item: restore health and cure status as the item says. */

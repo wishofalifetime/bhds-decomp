@@ -111,4 +111,4 @@ src/itemstack.c:
 
 src/invuse.c:
     complete
-    .text start:0x020ba1e4 end:0x020ba730
+    .text start:0x020ba1e4 end:0x020ba8d8
