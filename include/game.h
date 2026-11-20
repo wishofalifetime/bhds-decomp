@@ -37,6 +37,8 @@ typedef struct UnkStruct_02143640 {
     /* 0x010 */ u8 unk10;
     /* 0x011 */ u8 unk011[0xF74 - 0x011];
     /* 0xF74 */ s32 unkF74[3];  /* a position, copied by script opcode 0x17 */
+    /* 0xF80 */ u8 unkF80[0xFDA - 0xF80];
+    /* 0xFDA */ u8 unkFDA;       /* bit 7 answers flag set 10 in opcodes 0x04/0x05 */
 } UnkStruct_02143640;
 
 extern UnkStruct_02143640 data_02143640;

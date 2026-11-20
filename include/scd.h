@@ -17,7 +17,7 @@ typedef s32 (*ScdHandler)(void);
 typedef struct ScdState {
     /* 0x000 */ u8 *pc;          /* current instruction */
     /* 0x004 */ u8 unk004[0x50 - 0x04];
-    /* 0x050 */ u32 *stackPtr;   /* grows up by 4 per nested block */
+    /* 0x050 */ u8 **stackPtr;   /* block stack: end address of each open block */
     /* 0x054 */ u8 unk054[0x247 - 0x54];
     /* 0x247 */ u8 unk247;       /* set by opcode 0x29 */
     /* 0x248 */ u8 depth;        /* nesting level */

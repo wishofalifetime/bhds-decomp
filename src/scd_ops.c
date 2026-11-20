@@ -11,6 +11,7 @@
 #include "scd.h"
 #include "game.h"
 #include "obj.h"
+#include "scd_data.h"
 
 /* Not yet identified. JP addresses. */
 extern s32 func_020b1a2c(u8 a, u8 b);
@@ -29,7 +30,6 @@ extern void func_020a2d70(Obj *obj);
 extern void func_020a3040(u32 id, ObjModel *model, Obj *obj);
 extern void func_020f7d54(void *a, u32 b);
 extern void func_020f7f04(void *a, u32 b, u32 c);
-extern s32 func_020b35e0(void *obj, u32 id);
 extern void func_020b61c0(void);
 extern void func_020b61e4(void);
 extern void func_020b7cf0(u8 a, s16 b);
@@ -52,31 +52,12 @@ typedef struct UnkStruct_0213d4a6 {
     /* 0x01 */ u8 unk01[0x37];
 } UnkStruct_0213d4a6; /* size 0x38 */
 
-typedef struct UnkEntry_0213b850 {
-    /* 0x00 */ u8 id;
-    /* 0x01 */ u8 unk01;
-} UnkEntry_0213b850;
-
-typedef struct UnkStruct_0213b750 {
-    /* 0x000 */ u8 unk000[0x100];
-    /* 0x100 */ UnkEntry_0213b850 entries[0x30];
-} UnkStruct_0213b750;
-
 extern u8 data_02121f38[];                 /* JP 0x02121F38 */
 extern u16 data_0213a730[];                /* JP 0x0213A730 */
-extern UnkStruct_0213b750 data_0213b750;   /* JP 0x0213B750 */
-extern u8 data_0213b7ac[];                 /* JP 0x0213B7AC */
+extern u32 data_0213b7ac[];                /* JP 0x0213B7AC: flag words */
 extern u8 data_0213b8ce[][0x20];           /* JP 0x0213B8CE */
 extern UnkStruct_0213d4a6 data_0213d4a6[]; /* JP 0x0213D4A6 */
 extern UnkStruct_0213d628 data_0213d628;   /* JP 0x0213D628 */
-
-typedef struct UnkStruct_0213a71c {
-    /* 0x00 */ u8 unk00[0x08];
-    /* 0x08 */ u8 unk08;
-    /* 0x09 */ u8 unk09[0x16 - 0x09];
-    /* 0x16 */ s16 unk16;
-    /* 0x18 */ s16 unk18;
-} UnkStruct_0213a71c;
 
 typedef struct UnkSub_0214b640 {
     /* 0x00 */ u8 unk00[2];
@@ -97,7 +78,6 @@ typedef struct UnkStruct_0214c9e8 {
 } UnkStruct_0214c9e8;
 
 extern u16 data_02122084[];                /* JP 0x02122084 */
-extern UnkStruct_0213a71c data_0213a71c;   /* JP 0x0213A71C */
 extern u8 data_0214459c[];                 /* JP 0x0214459C */
 extern UnkStruct_0214b640 data_0214b640;   /* JP 0x0214B640 */
 extern UnkStruct_0214c9e8 *data_0214c9e8[]; /* JP 0x0214C9E8 */
@@ -449,8 +429,8 @@ s32 Scd_Op53(void)
 
     gScd.pc = pc + 4;
     if (kind == 2) {
-        value = func_020b35e0(data_0213b7ac, 0x25) ? 1 : 0;
-        value |= func_020b35e0(data_0213b7ac, 0x26) ? 2 : 0;
+        value = Flag_Test(data_0213b7ac, 0x25) ? 1 : 0;
+        value |= Flag_Test(data_0213b7ac, 0x26) ? 2 : 0;
     }
     gScd.testKind = kind;
     data_0213d628.unk50 = value;
