@@ -82,3 +82,7 @@ src/sndplay.c:
 src/snd.c:
     complete
     .text start:0x020b8374 end:0x020b8728
+
+src/g3d_mat.c:
+    complete
+    .text start:0x020b8728 end:0x020b8b7c

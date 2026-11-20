@@ -56,6 +56,8 @@
 #define REG_POLYGON_ATTR    (*(vu32 *)0x040004A4)  /* cmd 0x29 */
 #define REG_TEXIMAGE_PARAM  (*(vu32 *)0x040004A8)  /* cmd 0x2A */
 #define REG_PLTT_BASE       (*(vu32 *)0x040004AC)  /* cmd 0x2B */
+#define REG_DIF_AMB         (*(vu32 *)0x040004C0)  /* cmd 0x30 */
+#define REG_SPE_EMI         (*(vu32 *)0x040004C4)  /* cmd 0x31 */
 #define REG_SWAP_BUFFERS    (*(vu32 *)0x04000540)  /* cmd 0x50 */
 #define SWAP_BUFFERS_MANUAL_SORT  0x1  /* bit 0: translucent Y-sort manual */
 #define SWAP_BUFFERS_W_DEPTH      0x2  /* bit 1: W-buffering instead of Z */
