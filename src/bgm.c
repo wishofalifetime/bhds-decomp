@@ -74,13 +74,13 @@ extern void func_020c3ecc(void);
 extern void func_020c4194(u32 kind, u32 value);
 extern void func_020c4278(void);
 extern BOOL func_02088388(void);
-extern void func_020b71c4(u8 ch, u32 volume, u32 frames);
-extern void func_020b72d0(u8 ch, void *data);
-extern void func_020b7360(u8 ch, u32 volume);
-extern void func_020b73cc(u8 ch, u32 frames);
-extern void func_020b7480(u8 ch);
-extern void func_020b74f8(u8 ch, u16 track);
-extern s32 func_020b75d0(u8 ch);
+extern void SndCh_FadeTo(u8 ch, u32 volume, u32 frames);
+extern void SndCh_ApplyEffect(u8 ch, void *data);
+extern void SndCh_SetVolume(u8 ch, u32 volume);
+extern void SndCh_FadeOut(u8 ch, u32 frames);
+extern void SndCh_Stop(u8 ch);
+extern void SndCh_Play(u8 ch, u16 track);
+extern s32 SndCh_GetStatus(u8 ch);
 extern void func_020b7ef8(u32 id);
 extern s8 func_02073c4c(s16 x, s16 z);
 extern void func_02105ca8(const void *src, void *dst, u32 size);  /* probably MI_CpuCopy8 */
@@ -245,14 +245,14 @@ void Bgm_PlayJingle(u16 track)
             break;
         }
     }
-    func_020b74f8(ch, track);
+    SndCh_Play(ch, track);
     data_0213b750.flags |= 0x20000;
 }
 
 void Bgm_StopJingle(void)
 {
-    func_020b7480(0);
-    func_020b7480(1);
+    SndCh_Stop(0);
+    SndCh_Stop(1);
     data_0213b750.flags &= ~0x20000;
 }
 
@@ -260,8 +260,8 @@ void Bgm_StopJingle(void)
 void Bgm_UpdateJingle(void)
 {
     if (data_0213b750.flags & 0x20000) {
-        s32 a = func_020b75d0(1);
-        s32 b = func_020b75d0(0);
+        s32 a = SndCh_GetStatus(1);
+        s32 b = SndCh_GetStatus(0);
 
         if (a == 0 && b == 0) {
             data_0213b750.flags &= ~0x20000;
@@ -472,24 +472,24 @@ void Bgm_UpdateChannel(BgmChannel *c, u8 ch, u16 req)
             switch (c->req) {
             case 0xD4:
                 c->cur = c->req;
-                func_020b73cc(ch, 0xB4);
+                SndCh_FadeOut(ch, 0xB4);
                 break;
             case 9:
                 c->state = 2;
-                func_020b7480(ch);
+                SndCh_Stop(ch);
                 break;
             default:
                 c->cur = 0;
                 c->state = 1;
-                func_020b73cc(ch, 0x18);
+                SndCh_FadeOut(ch, 0x18);
                 break;
             }
         }
         break;
     case 1:
-        if (func_020b75d0(ch) != 4) {
+        if (SndCh_GetStatus(ch) != 4) {
             c->state = 2;
-            func_020b7480(ch);
+            SndCh_Stop(ch);
         }
         break;
     case 2:
@@ -500,7 +500,7 @@ void Bgm_UpdateChannel(BgmChannel *c, u8 ch, u16 req)
         } else {
             c->volume = 0x7F;
             c->unk03 = 0x7F;
-            func_020b74f8(ch, c->req & 0x7F);
+            SndCh_Play(ch, c->req & 0x7F);
         }
         break;
     }
@@ -511,7 +511,7 @@ void Bgm_UpdateChannel(BgmChannel *c, u8 ch, u16 req)
     switch (c->cur) {
     case 5:
     case 0x28:
-        if (func_020b75d0(ch) == 0) {
+        if (SndCh_GetStatus(ch) == 0) {
             c->cur = 0;
         }
         return;
@@ -549,16 +549,16 @@ void Bgm_UpdateChannel(BgmChannel *c, u8 ch, u16 req)
         }
         if (c->volume != volume) {
             c->volume = volume;
-            func_020b7360(ch, (u8)volume);
+            SndCh_SetVolume(ch, (u8)volume);
         }
         return;
     case 0x51:
         if (data_0214c640.unk3F4 & 1) {
-            func_020b72d0(ch, data_0214ca5c);
+            SndCh_ApplyEffect(ch, data_0214ca5c);
         } else if (c->volume == 0x7F) {
             c->volume = 0x7E;
-            func_020b7360(ch, 0);
-            func_020b71c4(ch, 0x7E, 0x96);
+            SndCh_SetVolume(ch, 0);
+            SndCh_FadeTo(ch, 0x7E, 0x96);
         }
         return;
     }
@@ -583,7 +583,7 @@ void Bgm_UpdateChannel(BgmChannel *c, u8 ch, u16 req)
             break;
         }
         if (n != 0) {
-            func_020b72d0(ch, data_02122a9c[n]);
+            SndCh_ApplyEffect(ch, data_02122a9c[n]);
         }
     }
 }

@@ -62,4 +62,11 @@ src/sndbank.c:
 
 src/sndstrm.c:
     complete
-    .text start:0x020b7570 end:0x020b7770
+    .text start:0x020b7570 end:0x020b780c
+
+src/sndstrm_load.c:
+    .text start:0x020b780c end:0x020b78a0
+
+src/sndch.c:
+    complete
+    .text start:0x020b78a0 end:0x020b7da8

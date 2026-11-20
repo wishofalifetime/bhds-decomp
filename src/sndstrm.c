@@ -1,20 +1,12 @@
 /*
  * sndstrm.c - sound system setup and the streamed sound player.
- * JP (ABHJ) 0x020B6E48 - 0x020B7048.
+ * JP (ABHJ) 0x020B6E48 - 0x020B70E4.
  *
  * Functions are defined in reverse address order (mwccarm emits functions
  * in reverse source order).
  */
 #include "types.h"
-
-typedef struct SndStream {
-    /* 0x000 */ u8 unk000[0x114];
-    /* 0x114 */ u8 state;       /* 1: stopped, 2: started, 3+: playing */
-    /* 0x115 */ u8 unk115[3];
-    /* 0x118 */ s16 unk118;
-    /* 0x11A */ u8 unk11A[2];
-    /* 0x11C */ void *data;
-} SndStream;
+#include "snd.h"
 
 typedef struct UnkStruct_0213a6cc {
     /* 0x00 */ u8 unk00[0xA];
@@ -28,25 +20,46 @@ extern void func_0200d380(u32 a);
 extern BOOL func_0200d38c(void);
 extern void func_0200d3b0(u32 a);
 extern u32 func_0200d958(u32 id, u32 kind);
-extern s32 func_020b70e4(void);
-extern void func_020b7410(void);
 extern void func_020b79b4(void);
 extern void func_020b7f70(void);
 extern void func_020b8028(u32 slot, u32 id);
 extern void func_020b82cc(void *data);
+extern BOOL func_0200d398(void);
 
-extern SndStream data_0213a548;             /* JP 0x0213A548 */
 extern UnkStruct_0213a6cc data_0213a6cc;    /* JP 0x0213A6CC */
 
-void SndStrm_Reset(void);
-void SndStrm_Stop(void);
-void SndStrm_Pause(void);
-s32 SndStrm_SetMode(u32 mode);
+void SndStrm_Update(void)
+{
+    SndStream *s = &data_0213a548;
+
+    if (s->state == 0 || s->state == 1) {
+        return;
+    }
+    if (!func_0200d398()) {
+        return;
+    }
+    if (s->delay == 0) {
+        switch (s->state) {
+        case 2:
+            s->pos = 0;
+            if (SndStrm_GetPos() >= s->target) {
+                s->state = 3;
+            }
+            break;
+        case 3:
+            s->pos = SndStrm_GetPos();
+            break;
+        }
+    } else {
+        s->delay--;
+    }
+}
+
 
 void SndStrm_Start(void)
 {
     func_0200d380(0);
-    data_0213a548.unk118 = 0;
+    data_0213a548.pos = 0;
     data_0213a548.state = 2;
 }
 
@@ -70,13 +83,13 @@ void SndStrm_Stop(void)
         func_020b82cc(s->data);
     }
     s->data = NULL;
-    s->unk118 = 0;
+    s->pos = 0;
     s->state = 0;
 }
 
-s16 SndStrm_GetUnk118(void)
+s16 SndStrm_GetPosCached(void)
 {
-    return data_0213a548.unk118;
+    return data_0213a548.pos;
 }
 
 s32 SndStrm_SetMode(u32 mode)
@@ -99,9 +112,9 @@ s32 SndStrm_SetMode(u32 mode)
     return func_0200d350(m);
 }
 
-s32 SndStrm_Open(void)
+BOOL SndStrm_Open(s16 target)
 {
-    s32 ret = func_020b70e4();
+    BOOL ret = SndStrm_Load(target);
 
     SndStrm_SetMode(data_0213a6cc.unk0A);
     SndStrm_Start();
@@ -137,7 +150,7 @@ void Snd_LoadBank0C(void)
 void Snd_Init(void)
 {
     SndStrm_Reset();
-    func_020b7410();
+    SndCh_StopAll();
     func_020b79b4();
     func_020b7f70();
 }
