@@ -39,7 +39,8 @@ typedef struct UnkGroupEntry {
 
 /* JP: 0x02143640 */
 typedef struct UnkStruct_02143640 {
-    /* 0x000 */ u8 unk000[0x0F];
+    /* 0x000 */ u8 unk000[0x0E];
+    /* 0x00E */ u8 unk0E;
     /* 0x00F */ u8 unk0F;
     /* 0x010 */ u8 unk10;
     /* 0x011 */ u8 unk011[0xA8 - 0x011];

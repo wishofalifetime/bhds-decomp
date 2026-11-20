@@ -183,6 +183,8 @@ typedef struct UnkStruct_0213b214 {
     /* 0x80 */ u32 unk80;
     /* 0x84 */ u8 unk84[0x94 - 0x84];
     /* 0x94 */ u8 unk94;         /* set by opcode 0x33 cmd 12 */
+    /* 0x95 */ u8 unk95[0x278 - 0x95];
+    /* 0x278 */ u8 unk278;
 } UnkStruct_0213b214;
 
 extern UnkStruct_0213b214 data_0213b214;  /* JP 0x0213B214 */
@@ -194,7 +196,9 @@ typedef struct UnkStruct_02144640 {
     /* 0x30 */ u16 unk30;        /* bits 2-3 cleared by opcode 0x20 */
     /* 0x32 */ u8 unk32[0xAE - 0x32];
     /* 0xAE */ u8 unkAE;
-    /* 0xAF */ u8 unkAF[0xE3 - 0xAF];
+    /* 0xAF */ u8 unkAF;
+    /* 0xB0 */ s16 maxHealth;
+    /* 0xB2 */ u8 unkB2[0xE3 - 0xB2];
     /* 0xE3 */ u8 unkE3;
 } UnkStruct_02144640;
 

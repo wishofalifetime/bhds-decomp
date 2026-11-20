@@ -100,3 +100,11 @@ src/hudgfx.c:
 
 src/hudwave.c:
     .text start:0x020b951c end:0x020b96c4
+
+src/hud.c:
+    complete
+    .text start:0x020b9c5c end:0x020ba0b0
+
+src/itemstack.c:
+    complete
+    .text start:0x020ba0b0 end:0x020ba1e4
