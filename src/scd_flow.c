@@ -22,8 +22,8 @@ extern void func_02094e38(u8 id);
 extern void func_02095518(void *obj);
 extern void func_02092b10(u8 a, u16 b);
 extern void func_020598ac(u8 a, u8 b);
-extern void func_020b60f8(u8 a);
-extern void func_020b612c(u8 a);
+extern void Bgm_ClearSlot(u8 a);
+extern void Bgm_SetSlot(u8 a);
 
 
 
@@ -511,7 +511,7 @@ s32 Scd_Op15(void)
     u8 a = pc[1];
 
     gScd.pc = pc + 2;
-    func_020b612c(a);
+    Bgm_SetSlot(a);
     return TRUE;
 }
 
@@ -522,6 +522,6 @@ s32 Scd_Op16(void)
     u8 a = pc[1];
 
     gScd.pc = pc + 2;
-    func_020b60f8(a);
+    Bgm_ClearSlot(a);
     return TRUE;
 }

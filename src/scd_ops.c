@@ -27,8 +27,8 @@ extern void func_020a2d70(Obj *obj);
 extern void func_020a3040(u32 id, ObjModel *model, Obj *obj);
 extern void func_020f7d54(void *a, u32 b);
 extern void func_020f7f04(void *a, u32 b, u32 c);
-extern void func_020b61c0(void);
-extern void func_020b61e4(void);
+extern void Bgm_RestoreSlots(void);
+extern void Bgm_SaveSlots(void);
 extern void func_020b7cf0(u8 a, s16 b);
 extern void func_020a0204(u8 arg);
 extern void func_020a025c(u8 arg);
@@ -368,7 +368,7 @@ s32 Scd_Op44(void)
 s32 Scd_Op4A(void)
 {
     gScd.pc += 2;
-    func_020b61c0();
+    Bgm_RestoreSlots();
     return TRUE;
 }
 
@@ -376,7 +376,7 @@ s32 Scd_Op4A(void)
 s32 Scd_Op4B(void)
 {
     gScd.pc += 2;
-    func_020b61e4();
+    Bgm_SaveSlots();
     return TRUE;
 }
 

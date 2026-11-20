@@ -41,7 +41,8 @@ typedef struct UnkEntry_0213b850 {
 typedef struct UnkStruct_0213b750 {
     /* 0x000 */ u8 unk000[0x44];
     /* 0x044 */ u32 flags;          /* bits 0-1 set by opcode 0x0F, bit 20 by 0x09/0x0A */
-    /* 0x048 */ u8 unk048[0x100 - 0x48];
+    /* 0x048 */ u32 flags2;         /* bits 17 and 28 checked by the BGM code */
+    /* 0x04C */ u8 unk04C[0x100 - 0x4C];
     /* 0x100 */ UnkEntry_0213b850 entries[0x30];
 } UnkStruct_0213b750;
 
@@ -170,7 +171,9 @@ typedef struct UnkStruct_0213b214 {
     /* 0x01 */ u8 unk01;
     /* 0x02 */ u8 unk02;
     /* 0x03 */ u8 unk03;
-    /* 0x04 */ u8 unk04[0x94 - 0x04];
+    /* 0x04 */ u8 unk04[0x16 - 0x04];
+    /* 0x16 */ u8 unk16;
+    /* 0x17 */ u8 unk17[0x94 - 0x17];
     /* 0x94 */ u8 unk94;         /* set by opcode 0x33 cmd 12 */
 } UnkStruct_0213b214;
 
