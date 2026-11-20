@@ -108,3 +108,7 @@ src/hud.c:
 src/itemstack.c:
     complete
     .text start:0x020ba0b0 end:0x020ba1e4
+
+src/invuse.c:
+    complete
+    .text start:0x020ba1e4 end:0x020ba730

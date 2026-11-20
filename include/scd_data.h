@@ -15,7 +15,8 @@ typedef struct UnkStruct_0213a71c {
     /* 0x02 */ u8 unk02;         /* saved to unk04 by opcode 0x09, restored by 0x0A */
     /* 0x03 */ u8 unk03;
     /* 0x04 */ u8 unk04;
-    /* 0x05 */ u8 unk05[0x08 - 0x05];
+    /* 0x05 */ u8 unk05;
+    /* 0x06 */ u8 unk06[0x08 - 0x06];
     /* 0x08 */ u8 unk08;
     /* 0x09 */ u8 unk09;
     /* 0x0A */ u8 unk0A;         /* copied from an object by opcode 0x39 */
@@ -171,7 +172,9 @@ typedef struct UnkStruct_0213b214 {
     /* 0x01 */ u8 unk01;
     /* 0x02 */ u8 unk02;
     /* 0x03 */ u8 unk03;
-    /* 0x04 */ u8 unk04[0x16 - 0x04];
+    /* 0x04 */ u8 unk04[0x09 - 0x04];
+    /* 0x09 */ u8 itemId;        /* item being used */
+    /* 0x0A */ u8 unk0A[0x16 - 0x0A];
     /* 0x16 */ u8 unk16;
     /* 0x17 */ u8 unk17[0x20 - 0x17];
     /* 0x20 */ u8 state;         /* scene state (1: running, 2: leaving) */
@@ -185,6 +188,7 @@ typedef struct UnkStruct_0213b214 {
     /* 0x94 */ u8 unk94;         /* set by opcode 0x33 cmd 12 */
     /* 0x95 */ u8 unk95[0x278 - 0x95];
     /* 0x278 */ u8 unk278;
+    /* 0x279 */ u8 unk279;
 } UnkStruct_0213b214;
 
 extern UnkStruct_0213b214 data_0213b214;  /* JP 0x0213B214 */
