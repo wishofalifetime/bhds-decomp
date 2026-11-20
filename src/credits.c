@@ -1,7 +1,7 @@
 /*
  * credits.c - scrolling text screen: two columns of text lines drawn into
  * BG maps and scrolled up, then faded out.
- * JP (ABHJ) 0x020B88A4 - 0x020B8D6C.
+ * JP (ABHJ) 0x020B88A4 - 0x020B8D9C.
  *
  * Functions are defined in reverse address order (mwccarm emits functions
  * in reverse source order).
@@ -42,6 +42,14 @@ extern s8 *data_0212eb2c[];                  /* JP 0x0212EB2C: text lines, NULL-
 extern const u8 data_021237c4[];             /* JP 0x021237C4 */
 extern u8 data_0213b230[];                   /* JP 0x0213B230 */
 extern u8 data_0213b264[];                   /* JP 0x0213B264 */
+
+extern VoidFunc data_021237b8[];  /* JP 0x021237B8: handlers by scene state */
+
+/* Run the handler for the current scene state. */
+void Credits_Main(void)
+{
+    data_021237b8[data_0213b214.state]();
+}
 
 void Credits_Init(void)
 {

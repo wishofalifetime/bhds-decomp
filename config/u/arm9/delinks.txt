@@ -92,4 +92,11 @@ src/credits_text.c:
 
 src/credits.c:
     complete
-    .text start:0x020b8ca8 end:0x020b9170
+    .text start:0x020b8ca8 end:0x020b91a0
+
+src/hudgfx.c:
+    complete
+    .text start:0x020b91a0 end:0x020b91f8
+
+src/hudwave.c:
+    .text start:0x020b91f8 end:0x020b93a0
