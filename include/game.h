@@ -30,15 +30,33 @@ typedef struct GameState {
 
 extern GameState gGame;
 
+/* 0x38-byte entries at data_02143640.unkA8 */
+typedef struct UnkGroupEntry {
+    /* 0x00 */ u8 active;
+    /* 0x01 */ u8 group;    /* cleared by Scd_ClearMaskedGroups */
+    /* 0x02 */ u8 unk02[0x36];
+} UnkGroupEntry;
+
 /* JP: 0x02143640 */
 typedef struct UnkStruct_02143640 {
     /* 0x000 */ u8 unk000[0x0F];
     /* 0x00F */ u8 unk0F;
     /* 0x010 */ u8 unk10;
-    /* 0x011 */ u8 unk011[0xF74 - 0x011];
+    /* 0x011 */ u8 unk011[0xA8 - 0x011];
+    /* 0x0A8 */ UnkGroupEntry unkA8[64];  /* real length unknown */
+    /* 0xEA8 */ u8 unkEA8[0xF4A - 0xEA8];
+    /* 0xF4A */ u8 unkF4A;       /* set by opcode 0x33 cmd 11 */
+    /* 0xF4B */ u8 unkF4B[0xF74 - 0xF4B];
     /* 0xF74 */ s32 unkF74[3];  /* a position, copied by script opcode 0x17 */
-    /* 0xF80 */ u8 unkF80[0xFDA - 0xF80];
+    /* 0xF80 */ u8 unkF80[0xFD5 - 0xF80];
+    /* 0xFD5 */ u8 unkFD5;       /* passed on by opcode 0x2B */
+    /* 0xFD6 */ u8 unkFD6[0xFDA - 0xFD6];
     /* 0xFDA */ u8 unkFDA;       /* bit 7 answers flag set 10 in opcodes 0x04/0x05 */
+    /* 0xFDB */ u8 unkFDB;
+    /* 0xFDC */ u8 unkFDC;
+    /* 0xFDD */ u8 unkFDD[0xFE6 - 0xFDD];
+    /* 0xFE6 */ u8 unkFE6;
+    /* 0xFE7 */ u8 unkFE7;
 } UnkStruct_02143640;
 
 extern UnkStruct_02143640 data_02143640;

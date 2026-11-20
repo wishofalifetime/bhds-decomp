@@ -32,4 +32,7 @@ src/scd_op17.c:
 
 src/scd_flow.c:
     complete
-    .text start:0x020b3184 end:0x020b3ab0
+    .text start:0x020b3184 end:0x020b3de8
+
+src/scd_ops2.c:
+    .text start:0x020b3de8 end:0x020b5350

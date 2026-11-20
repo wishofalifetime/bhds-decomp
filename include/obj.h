@@ -18,7 +18,8 @@ typedef struct Obj {
     /* 0x07 */ u8 unk07;
     /* 0x08 */ u8 unk08;
     /* 0x09 */ u8 kind;          /* script id & 0x7F */
-    /* 0x0A */ u8 unk0A[2];
+    /* 0x0A */ u8 unk0A;
+    /* 0x0B */ u8 unk0B;
     /* 0x0C */ u16 *unk0C;       /* points at unk94 */
     /* 0x10 */ u8 unk10[4];
     /* 0x14 */ u32 flags;
@@ -35,7 +36,9 @@ typedef struct Obj {
     /* 0x48 */ u8 unk48[0x4E - 0x48];
     /* 0x4E */ s16 unk4E;
     /* 0x50 */ s16 unk50;
-    /* 0x52 */ u8 unk52[0x94 - 0x52];
+    /* 0x52 */ u8 unk52;         /* 0-31, set/adjusted by opcode 0x34 */
+    /* 0x53 */ u8 unk53[0x92 - 0x53];
+    /* 0x92 */ u16 unk92;        /* compared by opcode 0x36 */
     /* 0x94 */ u16 unk94;
     /* 0x96 */ u16 unk96;
     /* 0x98 */ u16 unk98;
@@ -51,6 +54,8 @@ typedef struct Obj {
     /* 0xAC */ s16 unkAC;
     /* 0xAE */ u8 unkAE[2];
     /* 0xB0 */ void *parent;
+    /* 0xB4 */ u8 unkB4[0xEC - 0xB4];
+    /* 0xEC */ u16 unkEC;        /* bits 2-3 cleared by opcode 0x21 */
 } Obj;
 
 #endif /* BHDS_OBJ_H */

@@ -18,7 +18,13 @@ typedef struct ScdState {
     /* 0x000 */ u8 *pc;          /* current instruction */
     /* 0x004 */ u8 unk004[0x50 - 0x04];
     /* 0x050 */ u8 **stackPtr;   /* block stack: end address of each open block */
-    /* 0x054 */ u8 unk054[0x247 - 0x54];
+    /* 0x054 */ u8 unk054[4];
+    /* 0x058 */ void *target;      /* set by opcode 0x3D, released by 0x3E */
+    /* 0x05C */ u8 unk05C[0x240 - 0x5C];
+    /* 0x240 */ s32 unk240;        /* set by opcode 0x2B */
+    /* 0x244 */ u8 unk244;
+    /* 0x245 */ u8 unk245;         /* cleared by opcode 0x33 cmd 1 */
+    /* 0x246 */ u8 unk246;
     /* 0x247 */ u8 unk247;       /* set by opcode 0x29 */
     /* 0x248 */ u8 depth;        /* nesting level */
     /* 0x249 */ u8 unk249;
@@ -48,6 +54,8 @@ extern ScdHandler gScdOpcodeTable[SCD_OPCODE_COUNT];  /* JP 0x02122200 */
 extern ScdOpcodeInfo gScdOpcodeInfo[];                /* JP 0x02122014 */
 extern ScdState gScd;                                 /* JP 0x0213D428 */
 
-s32 Scd_Step(ScdTask *task);  /* JP 0x020B1A60 */
+s32 Scd_Step(ScdTask *task);       /* JP 0x020B1A60 */
+s32 Scd_ExecOpcode(u32 op);         /* JP 0x020B3640 */
+u32 Scd_IsSpawned(u8 *insn);        /* JP 0x020B341C */
 
 #endif /* BHDS_SCD_H */

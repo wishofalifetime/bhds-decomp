@@ -16,7 +16,6 @@
 /* Not yet identified. JP addresses. */
 extern s32 func_020b1a2c(u8 a, u8 b);
 extern void func_020b1c14(u8 *pc);
-extern s32 func_020b341c(u8 *pc);
 extern u32 func_020b5534(u8 kind);
 extern void func_020b641c(u16 id);
 extern void func_020b7e0c(u8 a, s32 b, s32 *pos, s8 c);
@@ -59,29 +58,8 @@ extern u8 data_0213b8ce[][0x20];           /* JP 0x0213B8CE */
 extern UnkStruct_0213d4a6 data_0213d4a6[]; /* JP 0x0213D4A6 */
 extern UnkStruct_0213d628 data_0213d628;   /* JP 0x0213D628 */
 
-typedef struct UnkSub_0214b640 {
-    /* 0x00 */ u8 unk00[2];
-    /* 0x02 */ u8 unk02;
-} UnkSub_0214b640;
-
-typedef struct UnkStruct_0214b640 {
-    /* 0x000 */ u8 unk000[0x7A9];
-    /* 0x7A9 */ u8 unk7A9;
-    /* 0x7AA */ u8 unk7AA;
-    /* 0x7AB */ u8 unk7AB;
-    /* 0x7AC */ UnkSub_0214b640 *unk7AC;
-} UnkStruct_0214b640;
-
-typedef struct UnkStruct_0214c9e8 {
-    /* 0x00 */ u8 unk00[0x08];
-    /* 0x08 */ u8 unk08;
-} UnkStruct_0214c9e8;
-
 extern u16 data_02122084[];                /* JP 0x02122084 */
 extern u8 data_0214459c[];                 /* JP 0x0214459C */
-extern UnkStruct_0214b640 data_0214b640;   /* JP 0x0214B640 */
-extern UnkStruct_0214c9e8 *data_0214c9e8[]; /* JP 0x0214C9E8 */
-extern Obj *data_0214d56c[];               /* JP 0x0214D56C, 64 object slots */
 extern Obj *data_027e000c;                 /* DTCM: last spawned object */
 extern s32 data_027e0054[3];               /* DTCM: position scratch */
 
@@ -101,7 +79,7 @@ s32 Scd_Op19(void)
     u8 *pc;
     u8 idx;
     u8 value;
-    UnkStruct_0214c9e8 *entry;
+    Obj *entry;
 
     pc = gScd.pc;
     idx = pc[1];
@@ -131,7 +109,7 @@ s32 Scd_Op1B(void)
     u8 *pc = gScd.pc;
 
     gScd.pc = pc + 0x16;
-    if (pc[3] == 0xFF || !func_020b341c(pc)) {
+    if (pc[3] == 0xFF || !Scd_IsSpawned(pc)) {
         Obj *obj = func_0205550c(pc, pc[0x12] & 0xF);
         data_027e000c = obj;
         Scd_OnSpawn(obj->kind);
@@ -301,8 +279,8 @@ s32 Scd_Op1F(void)
         obj->model = NULL;
     }
 
-    if ((obj->kind & 0xF) >= data_0214b640.unk7AC->unk02) {
-        data_0214b640.unk7AC->unk02 = (obj->kind & 0xF) + 1;
+    if ((obj->kind & 0xF) >= data_0214b640.room->unk02) {
+        data_0214b640.room->unk02 = (obj->kind & 0xF) + 1;
     }
     gScd.objCount++;
     obj->flags = 0x40000000;

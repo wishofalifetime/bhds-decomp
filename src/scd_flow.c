@@ -1,7 +1,8 @@
 /*
  * scd_flow.c - room script opcode handlers 0x00-0x16, including the
  * control-flow opcodes.
- * JP (ABHJ) 0x020B2A5C - 0x020B3388 (contiguous run of handlers).
+ * JP (ABHJ) 0x020B2A5C - 0x020B36C0: handlers, then the flag functions,
+ * spawn-instruction helpers and Scd_ExecOpcode.
  *
  * Handlers are defined in reverse address order (mwccarm emits functions
  * in reverse source order).
@@ -16,53 +17,145 @@ extern void func_0200ed14(void);
 extern void func_020794a4(u32 a);
 extern void func_02094ec4(u8 id);
 extern void func_02094f38(u8 id);
+extern void func_02094dc4(u32 a);
+extern void func_02094e38(u8 id);
+extern void func_02095518(void *obj);
+extern s32 func_020b1bb8(u8 *pc, ScdOpcodeInfo *info);
 extern void func_02092b10(u8 a, u16 b);
 extern void func_020598ac(u8 a, u8 b);
 extern void func_020b60f8(u8 a);
 extern void func_020b612c(u8 a);
 
-typedef struct UnkEntry_02147d0c {
-    /* 0x00 */ u8 unk00;
-    /* 0x01 */ u8 unk01;
-    /* 0x02 */ u16 unk02;
-    /* 0x04 */ u16 unk04;
-    /* 0x06 */ u16 unk06;
-    /* 0x08 */ u8 *script;       /* points into the running script */
-} UnkEntry_02147d0c; /* size 0xC */
 
-typedef struct UnkStruct_02147640 {
-    /* 0x000 */ u8 unk000[0x84C];
-    /* 0x84C */ UnkEntry_02147d0c *lastEntry;  /* highest data_02147d0c entry used */
-} UnkStruct_02147640;
 
-typedef struct UnkStruct_02144540 {
-    /* 0x00 */ u8 unk00[0x3C];
-    /* 0x3C */ u16 unk3C;
-    /* 0x3E */ u16 unk3E;
-    /* 0x40 */ u16 unk40;
-} UnkStruct_02144540;
-
-extern UnkEntry_02147d0c data_02147d0c[];  /* JP 0x02147D0C */
-extern UnkStruct_02144540 data_02144540;   /* JP 0x02144540 */
-extern UnkStruct_02147640 data_02147640;   /* JP 0x02147640 */
 
 typedef struct UnkStruct_0213a6cc {
     /* 0x00 */ u8 unk00[4];
     /* 0x04 */ u8 unk04;
 } UnkStruct_0213a6cc;
 
-typedef struct UnkStruct_0213b214 {
-    /* 0x00 */ u8 unk00[3];
-    /* 0x03 */ u8 unk03;
-} UnkStruct_0213b214;
-
 extern UnkStruct_0213a6cc data_0213a6cc;   /* JP 0x0213A6CC */
-extern UnkStruct_0213b214 data_0213b214;   /* JP 0x0213B214 */
 extern u32 data_0213b764[];                /* JP 0x0213B764: flags that notify on change */
 extern u16 data_0213a730[];                /* JP 0x0213A730 */
 
 void Scd_SetFlag(u32 *flags, u32 id);
 void Scd_ClearFlag(u32 *flags, u32 id);
+
+typedef struct UnkStruct_0213b49c {
+    /* 0x000 */ u8 unk000[0x1FC];
+    /* 0x1FC */ u32 unk1FC_0 : 1;
+                u32 notify : 1;
+} UnkStruct_0213b49c;
+
+/* An object definition whose collected state is tracked by flag. */
+typedef struct ScdObjDef {
+    /* 0x000 */ u8 unk000[0x169];
+    /* 0x169 */ u8 flags;
+    /* 0x16A */ u8 unk16A[0x172 - 0x16A];
+    /* 0x172 */ u16 id;
+} ScdObjDef;
+
+extern UnkStruct_0213b49c data_0213b49c;   /* JP 0x0213B49C */
+extern u32 data_0213b6a4[];                /* JP 0x0213B6A4: bit n-0x40 per object 0x40-0x7F */
+extern u32 data_0213b7b4[];                /* JP 0x0213B7B4: spawned objects */
+extern u32 data_0213b80c[];                /* JP 0x0213B80C */
+
+/* Run one opcode outside the interpreter loop. */
+s32 Scd_ExecOpcode(u32 op)
+{
+    u8 i;
+
+    for (i = 0; gScdOpcodeInfo[i].opcode != 0x5A; i++) {
+        if (op == gScdOpcodeInfo[i].opcode) {
+            gScd.pc += func_020b1bb8(gScd.pc, &gScdOpcodeInfo[i]);
+            return TRUE;
+        }
+    }
+    return gScdOpcodeTable[op]();
+}
+
+void Flag_Set(u32 *flags, u32 id)
+{
+    flags[id >> 5] |= 1 << (31 - (id & 0x1F));
+}
+
+void Flag_Clear(u32 *flags, u32 id)
+{
+    flags[id >> 5] &= ~(1 << (31 - (id & 0x1F)));
+}
+
+u32 Flag_Test(u32 *flags, u32 id)
+{
+    return flags[id >> 5] & (1 << (31 - (id & 0x1F)));
+}
+
+/* Record that obj has been dealt with, notifying for ids 0x40-0x7F. */
+void Scd_MarkObjFlag(ScdObjDef *obj)
+{
+    if (data_0213a6cc.unk04 != 0) {
+        if (!Flag_Test(data_0213b7b4, obj->id) || obj->id == 0xFF) {
+            if (obj->id >= 0x40 && obj->id != 0xFF) {
+                if (data_0213b49c.notify == 1) {
+                    func_02094e38(obj->id);
+                }
+                if (obj->id < 0x80) {
+                    s32 n = obj->id - 0x40;
+
+                    if (!(data_0213b6a4[n / 32] & (1 << (n & 0x1F)))) {
+                        if (obj->id >= 0x60) {
+                            if (obj->flags & 2) {
+                                func_02094dc4(2);
+                                n = obj->id - 0x40;
+                                data_0213b6a4[n / 32] |= 1 << (n & 0x1F);
+                            }
+                        } else if (obj->id >= 0x40) {
+                            if (obj->flags & 4) {
+                                func_02094dc4(1);
+                                n = obj->id - 0x40;
+                                data_0213b6a4[n / 32] |= 1 << (n & 0x1F);
+                            }
+                        }
+                    }
+                }
+            }
+            func_02095518(obj);
+        }
+    }
+    Flag_Set(data_0213b7b4, obj->id);
+}
+
+/* TRUE if the object of spawn instruction insn (0x1B/0x55) already exists. */
+u32 Scd_IsSpawned(u8 *insn)
+{
+    if (insn[0] != 0x55) {
+        return Flag_Test(data_0213b7b4, insn[3]);
+    }
+    return Flag_Test(data_0213b7b4, insn[3] + 0x100);
+}
+
+/* Object id of the 0x18/0x56 instruction that ends just before pc + 0x18. */
+u16 Scd_Op18ObjId(u8 *pc)
+{
+    u8 *insn = pc - 2;
+
+    return insn[0] == 0x56 ? insn[0x16] + 0x100 : insn[0x16];
+}
+
+u32 Scd_TestOp18Flag(u8 *pc)
+{
+    return Flag_Test(data_0213b80c, Scd_Op18ObjId(pc));
+}
+
+void Scd_ClearOp18Flag(u8 *pc)
+{
+    Flag_Clear(data_0213b80c, Scd_Op18ObjId(pc));
+}
+
+/* Object id of a spawn instruction; 0x55 addresses ids 0x100-0x1FF. */
+u16 Scd_SpawnObjId(u8 *insn)
+{
+    return insn[0] == 0x55 ? insn[3] + 0x100 : insn[3];
+}
 
 /* 0x00: end of script. */
 s32 Scd_Op00(void)
