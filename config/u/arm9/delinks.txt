@@ -21,7 +21,7 @@ src/heap.c:
 
 src/scd.c:
     complete
-    .text start:0x020b1e64 end:0x020b1e9c
+    .text start:0x020b1e30 end:0x020b2360
 
 src/scd_ops.c:
     complete
@@ -36,3 +36,6 @@ src/scd_flow.c:
 
 src/scd_ops2.c:
     .text start:0x020b3ac4 end:0x020b502c
+
+src/scd_task.c:
+    .text start:0x020b52a0 end:0x020b5540

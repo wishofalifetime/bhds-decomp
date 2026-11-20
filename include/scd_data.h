@@ -95,7 +95,8 @@ typedef struct RoomData {
     /* 0x00 */ u8 count;         /* entries in data_02143640.unkA8 to scan */
     /* 0x01 */ u8 unk01;
     /* 0x02 */ u8 unk02;         /* one more than the highest object level (0x1F) */
-    /* 0x03 */ u8 unk03[3];
+    /* 0x03 */ u8 unk03;         /* one more than the highest item slot (0x18) */
+    /* 0x04 */ u8 unk04[2];
     /* 0x06 */ u16 unk06[3];
     /* 0x0C */ RoomPoint points[3];
     /* 0x48 */ struct RoomLink *links;  /* 0x14-byte entries, set by opcode 0x3A */

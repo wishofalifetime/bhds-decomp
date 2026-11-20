@@ -58,4 +58,20 @@ typedef struct Obj {
     /* 0xEC */ u16 unkEC;        /* bits 2-3 cleared by opcode 0x21 */
 } Obj;
 
+/*
+ * Object model ids. The US and EU versions have one more model, inserted
+ * below 0xF2, so every id from there on is one higher than in JP.
+ */
+#ifdef VERSION_JP
+#define OBJ_MODEL_COUNT     0x1C5
+#define OBJ_MODEL_SPECIAL   0xF2
+#define OBJ_MODEL_TRACKED_LO 0xF3
+#define OBJ_MODEL_TRACKED_HI 0xFF
+#else
+#define OBJ_MODEL_COUNT     0x1C6
+#define OBJ_MODEL_SPECIAL   0xF3
+#define OBJ_MODEL_TRACKED_LO 0xF4
+#define OBJ_MODEL_TRACKED_HI 0x100
+#endif
+
 #endif /* BHDS_OBJ_H */

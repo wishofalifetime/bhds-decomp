@@ -14,8 +14,6 @@
 #include "scd_data.h"
 
 /* Not yet identified. JP addresses. */
-extern s32 func_020b1a2c(u8 a, u8 b);
-extern void func_020b1c14(u8 *pc);
 extern u32 func_020b5534(u8 kind);
 extern void func_020b641c(u16 id);
 extern void func_020b7e0c(u8 a, s32 b, s32 *pos, s8 c);
@@ -63,13 +61,13 @@ extern u8 data_0214459c[];                 /* JP 0x0214459C */
 extern Obj *data_027e000c;                 /* DTCM: last spawned object */
 extern s32 data_027e0054[3];               /* DTCM: position scratch */
 
-/* 0x18 (also 0x56): 26-byte instruction handled by func_020b1c14. */
+/* 0x18 (also 0x56): place an item (26-byte instruction). */
 s32 Scd_Op18(void)
 {
     u8 *pc = gScd.pc;
 
     gScd.pc = pc + 0x1A;
-    func_020b1c14(pc);
+    Scd_SetItem(pc);
     return TRUE;
 }
 
@@ -193,22 +191,6 @@ s32 Scd_Op1E(void)
     func_020b641c(a + b);
     return TRUE;
 }
-
-/*
- * Object model ids. The US and EU versions have one more model, inserted
- * below 0xF2, so every id from there on is one higher than in JP.
- */
-#ifdef VERSION_JP
-#define OBJ_MODEL_COUNT     0x1C5
-#define OBJ_MODEL_SPECIAL   0xF2
-#define OBJ_MODEL_TRACKED_LO 0xF3
-#define OBJ_MODEL_TRACKED_HI 0xFF
-#else
-#define OBJ_MODEL_COUNT     0x1C6
-#define OBJ_MODEL_SPECIAL   0xF3
-#define OBJ_MODEL_TRACKED_LO 0xF4
-#define OBJ_MODEL_TRACKED_HI 0x100
-#endif
 
 /* 0x1F: create a scene object from a 28-byte instruction. */
 s32 Scd_Op1F(void)
@@ -462,7 +444,7 @@ s32 Scd_Op58(void)
 {
     u8 *pc = gScd.pc;
     u8 a = pc[1];
-    s16 value = func_020b1a2c(a, pc[2]);
+    s16 value = Scd_LookupPair(a, pc[2]);
 
     gScd.pc += 4;
     func_020b7cf0(a, value);

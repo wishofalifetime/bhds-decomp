@@ -12,7 +12,6 @@
 #include "obj.h"
 
 /* Not yet identified. JP addresses. */
-extern s32 func_020b1a2c(u8 a, u8 b);
 extern void func_020b7e0c(u8 a, s32 b, s32 *pos, s8 c);
 extern void func_020b7e80(u8 a, s32 b, s8 x, s8 angle, s8 c);
 extern Obj *func_02053d0c(u8 id);
@@ -28,7 +27,7 @@ s32 Scd_Op17(void)
 
     gScd.pc = pc + 10;
     a = pc[1];
-    b = func_020b1a2c(a, pc[2]);
+    b = Scd_LookupPair(a, pc[2]);
     if (a == 6 && b == 2) {
         gScd.unk8C8 = 1;
     }

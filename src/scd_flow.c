@@ -20,7 +20,6 @@ extern void func_02094f38(u8 id);
 extern void func_02094dc4(u32 a);
 extern void func_02094e38(u8 id);
 extern void func_02095518(void *obj);
-extern s32 func_020b1bb8(u8 *pc, ScdOpcodeInfo *info);
 extern void func_02092b10(u8 a, u16 b);
 extern void func_020598ac(u8 a, u8 b);
 extern void func_020b60f8(u8 a);
@@ -67,7 +66,7 @@ s32 Scd_ExecOpcode(u32 op)
 
     for (i = 0; gScdOpcodeInfo[i].opcode != 0x5A; i++) {
         if (op == gScdOpcodeInfo[i].opcode) {
-            gScd.pc += func_020b1bb8(gScd.pc, &gScdOpcodeInfo[i]);
+            gScd.pc += Scd_ExecDesc(gScd.pc, &gScdOpcodeInfo[i]);
             return TRUE;
         }
     }
