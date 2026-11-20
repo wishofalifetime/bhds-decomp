@@ -24,4 +24,4 @@ src/scd.c:
 
 src/scd_ops.c:
     complete
-    .text start:0x020b28c4 end:0x020b2a44
+    .text start:0x020b2684 end:0x020b2b0c
