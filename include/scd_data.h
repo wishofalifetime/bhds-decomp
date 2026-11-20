@@ -173,7 +173,15 @@ typedef struct UnkStruct_0213b214 {
     /* 0x03 */ u8 unk03;
     /* 0x04 */ u8 unk04[0x16 - 0x04];
     /* 0x16 */ u8 unk16;
-    /* 0x17 */ u8 unk17[0x94 - 0x17];
+    /* 0x17 */ u8 unk17[0x20 - 0x17];
+    /* 0x20 */ u8 state;         /* scene state (1: running, 2: leaving) */
+    /* 0x21 */ u8 unk21[0x26 - 0x21];
+    /* 0x26 */ u16 speed;        /* scroll step per frame, 8.8 fixed */
+    /* 0x28 */ u8 unk28[0x4C - 0x28];
+    /* 0x4C */ void *work;       /* scene work area */
+    /* 0x50 */ u8 unk50[0x80 - 0x50];
+    /* 0x80 */ u32 unk80;
+    /* 0x84 */ u8 unk84[0x94 - 0x84];
     /* 0x94 */ u8 unk94;         /* set by opcode 0x33 cmd 12 */
 } UnkStruct_0213b214;
 

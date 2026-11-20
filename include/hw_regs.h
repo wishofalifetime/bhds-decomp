@@ -11,12 +11,15 @@
 
 /* --- 2D engine A --- */
 #define REG_DISPCNT         (*(vu32 *)0x04000000)
+#define REG_BG3CNT          (*(vu16 *)0x0400000E)
 #define REG_BG1HOFS         (*(vu16 *)0x04000014)
 #define REG_BLDCNT          (*(vu16 *)0x04000050)
 #define REG_MASTER_BRIGHT   (*(vu16 *)0x0400006C)
 
 /* --- 2D engine B --- */
 #define REG_DB_DISPCNT        (*(vu32 *)0x04001000)
+#define REG_DB_BG2CNT         (*(vu16 *)0x0400100C)
+#define REG_DB_BG3CNT         (*(vu16 *)0x0400100E)
 #define REG_DB_BG1HOFS        (*(vu16 *)0x04001014)
 #define REG_DB_BLDCNT         (*(vu16 *)0x04001050)
 #define REG_DB_MASTER_BRIGHT  (*(vu16 *)0x0400106C)

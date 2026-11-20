@@ -86,3 +86,10 @@ src/snd.c:
 src/g3d_mat.c:
     complete
     .text start:0x020b8728 end:0x020b8b7c
+
+src/credits_text.c:
+    .text start:0x020b8b7c end:0x020b8ca8
+
+src/credits.c:
+    complete
+    .text start:0x020b8ca8 end:0x020b9170
