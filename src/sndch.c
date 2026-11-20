@@ -22,8 +22,6 @@ typedef struct SndEffectOut {
 } SndEffectOut;
 
 /* Not yet identified. JP addresses. */
-extern void func_020b82cc(void *data);
-extern void *func_020b82e4(u32 size);
 extern void func_01ffc2b4(void *data);     /* ITCM */
 extern s32 func_0200d3f8(void);
 extern s32 func_0200d404(u16 ch, u32 a);
@@ -56,7 +54,7 @@ void SndCh_Update(void)
             if (Snd_GetPlayState(c->id) == 0) {
                 func_0200d4e8(i);
                 if (c->buf != NULL) {
-                    func_020b82cc(c->buf);
+                    Snd_Free(c->buf);
                     c->buf = NULL;
                 }
                 c->id = 0;
@@ -139,7 +137,7 @@ void SndCh_Play(u32 ch, u16 id)
     SndCh_Stop(ch);
     size = func_0200d404(ch, 4);
     if (size > 0) {
-        c->buf = func_020b82e4(size);
+        c->buf = Snd_Alloc(size);
         if (c->buf != NULL) {
             func_0200d4f4(ch, c->buf, size, 1, 1);
             func_0200d4ac(id, 0, 0, 4, 0);
@@ -158,7 +156,7 @@ void SndCh_Stop(u32 ch)
         func_0200d4a0(c->id, 0);
         func_0200d4e8(ch);
         if (c->buf != NULL) {
-            func_020b82cc(c->buf);
+            Snd_Free(c->buf);
             c->buf = NULL;
         }
         c->id = 0;
@@ -177,7 +175,7 @@ void SndCh_StopAll(void)
 
         func_0200d4e8(i);
         if (c->buf != NULL) {
-            func_020b82cc(c->buf);
+            Snd_Free(c->buf);
             c->buf = NULL;
         }
         c->id = 0;

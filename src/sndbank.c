@@ -37,7 +37,7 @@ typedef struct SndBankState {
 extern BOOL func_02088388(void);
 extern u8 func_020883b4(void);
 extern u16 func_0201896c(u32 a, u32 b);
-extern void func_020b8028(u32 slot, u32 id);
+extern void SndBank_Load(u32 slot, u32 id);
 extern void Snd_PlayAt(u8 a, s32 b, s32 *pos, s8 c);
 extern void func_02105c14(void *dst, u32 value, u32 size);  /* probably MI_CpuFill8 */
 
@@ -158,9 +158,9 @@ void SndBank_LoadAll(void)
             break;
         }
         if (id >= 0xB && id <= 0x12) {
-            func_020b8028(0, id);
+            SndBank_Load(0, id);
         } else {
-            func_020b8028(slot, id);
+            SndBank_Load(slot, id);
             slot++;
         }
         if (slot >= 0x10) {
@@ -209,7 +209,7 @@ void SndBank_Add2(u8 id)
 
 void SndBank_LoadExtra(void)
 {
-    func_020b8028(0, (u16)data_02122ffc[*data_02147640.unk53C]);
+    SndBank_Load(0, (u16)data_02122ffc[*data_02147640.unk53C]);
 }
 
 /* Collect the banks for room kind n. */

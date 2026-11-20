@@ -11,7 +11,6 @@
 #include "snd.h"
 
 /* Not yet identified. JP addresses. */
-extern void *func_020b82e4(u32 size);
 extern void func_0200d3a4(u32 a);
 extern void func_0200d3bc(u32 a, u32 b, u32 c, u32 d, void *buf, u32 size);
 
@@ -20,7 +19,7 @@ BOOL SndStrm_Load(s16 target)
 {
     SndStream *s = &data_0213a548;
 
-    s->data = func_020b82e4(0xFA00);
+    s->data = Snd_Alloc(0xFA00);
     if (s->data == NULL) {
         return FALSE;
     }

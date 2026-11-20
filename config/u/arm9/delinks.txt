@@ -73,12 +73,12 @@ src/sndch.c:
 
 src/sndse.c:
     complete
-    .text start:0x020b7bcc end:0x020b7db8
-
-src/sndse2.c:
-    complete
-    .text start:0x020b7db8 end:0x020b7fd4
+    .text start:0x020b7bcc end:0x020b7fd4
 
 src/sndplay.c:
     complete
     .text start:0x020b7fd4 end:0x020b8374
+
+src/snd.c:
+    complete
+    .text start:0x020b8374 end:0x020b8728

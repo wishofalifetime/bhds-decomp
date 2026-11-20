@@ -19,7 +19,7 @@ extern void func_020777a0(void);
 extern void func_020777dc(void);
 extern void func_02077cd8(void);
 extern void func_02093198(void);
-extern void func_020b82fc(void);
+extern void Snd_Update(void);
 extern void func_020d8acc(void);
 extern void func_020d8d50(void);
 
@@ -53,7 +53,7 @@ void NitroMain(void)
         }
         func_02013644();
         func_0201354c();
-        func_020b82fc();
+        Snd_Update();
         func_020d8d50();
 
         gGame.frameCount++;

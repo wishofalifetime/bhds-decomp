@@ -17,8 +17,6 @@ typedef struct SndEffectOut {
 } SndEffectOut;
 
 /* Not yet identified. JP addresses. */
-extern void func_020b82cc(void *data);
-extern void *func_020b82e4(u32 size);
 extern void func_01ffc2b4(void *pos);  /* ITCM */
 extern void func_0200d638(u32 a);
 extern void func_0200d680(s32 a, u32 b, u32 c, u32 d);
@@ -142,7 +140,7 @@ void SndSe_Update(void)
         case 4:
             if (SndSe_GetPlayState(c->id) == 0) {
                 if (c->buf != NULL) {
-                    func_020b82cc(c->buf);
+                    Snd_Free(c->buf);
                     c->buf = NULL;
                     func_0200d8a4(c->id);
                 }
@@ -161,7 +159,7 @@ BOOL SndSe_Preload(s32 i, u32 id)
     SndChannel *c = &data_0213a548.se[i];
 
     SndSe_Free(i);
-    c->buf = func_020b82e4(func_0200d9e0(id));
+    c->buf = Snd_Alloc(func_0200d9e0(id));
     if (c->buf == NULL) {
         return FALSE;
     }

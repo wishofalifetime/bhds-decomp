@@ -16,8 +16,17 @@ typedef struct SndChannel {
     /* 0x08 */ void *buf;
 } SndChannel;
 
+/* A loaded sound bank. */
+typedef struct SndBankSlot {
+    /* 0x00 */ u32 id;
+    /* 0x04 */ void *buf;
+} SndBankSlot;
+
 typedef struct SndStream {
-    /* 0x000 */ u8 unk000[0xA8];
+    /* 0x000 */ void *driverMem;           /* work memory for the sound driver */
+    /* 0x004 */ u8 unk004[4];
+    /* 0x008 */ SndBankSlot banks[16];     /* slots 0 and 1 keep their buffers */
+    /* 0x088 */ void *seqData[8];          /* by sound kind */
     /* 0x0A8 */ SndChannel se[5];      /* sound effects */
     /* 0x0E4 */ SndChannel chan[4];    /* music */
     /* 0x114 */ u8 state;       /* 1: loaded, 2: started, 3: playing */
@@ -26,7 +35,9 @@ typedef struct SndStream {
     /* 0x118 */ s16 pos;
     /* 0x11A */ u8 unk11A[2];
     /* 0x11C */ void *data;
-} SndStream;
+    /* 0x120 */ void *heapMem;
+    /* 0x124 */ u8 heap[0x10];             /* allocator state for heapMem */
+} SndStream; /* size 0x134 */
 
 extern SndStream data_0213a548;  /* JP 0x0213A548 */
 
@@ -53,5 +64,10 @@ u32 Snd_GetPlayState(u16 id);         /* JP 0x020B75E8 */
 
 /* sndse.c */
 void SndSe_Free(s32 i);               /* JP 0x020B79E4 */
+
+/* snd.c */
+void *Snd_Alloc(u32 size);            /* JP 0x020B82E4 */
+void Snd_Free(void *p);               /* JP 0x020B82CC */
+void Snd_Update(void);                /* JP 0x020B82FC */
 
 #endif /* BHDS_SND_H */

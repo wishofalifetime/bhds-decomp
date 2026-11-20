@@ -21,9 +21,8 @@ extern BOOL func_0200d38c(void);
 extern void func_0200d3b0(u32 a);
 extern u32 func_0200d958(u32 id, u32 kind);
 extern void SndSe_StopAll(void);
-extern void func_020b7f70(void);
-extern void func_020b8028(u32 slot, u32 id);
-extern void func_020b82cc(void *data);
+extern void SndBank_UnloadAll(void);
+extern void SndBank_Load(u32 slot, u32 id);
 extern BOOL func_0200d398(void);
 
 extern UnkStruct_0213a6cc data_0213a6cc;    /* JP 0x0213A6CC */
@@ -80,7 +79,7 @@ void SndStrm_Stop(void)
     }
     if (s->data != NULL) {
         func_0200d3b0(0);
-        func_020b82cc(s->data);
+        Snd_Free(s->data);
     }
     s->data = NULL;
     s->pos = 0;
@@ -144,7 +143,7 @@ u32 Snd_GetMaxSize(u32 lo, u32 hi)
 
 void Snd_LoadBank0C(void)
 {
-    func_020b8028(0xC, 1);
+    SndBank_Load(0xC, 1);
 }
 
 void Snd_Init(void)
@@ -152,5 +151,5 @@ void Snd_Init(void)
     SndStrm_Reset();
     SndCh_StopAll();
     SndSe_StopAll();
-    func_020b7f70();
+    SndBank_UnloadAll();
 }
