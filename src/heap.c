@@ -1,11 +1,15 @@
 /*
  * heap.c - game heap setup.
  * JP (ABHJ): Main_InitHeaps at 0x0207825C.
- * Status: NOT matching. The original keeps &gHeapSmall / &gHeapMain in
- * callee-saved registers and re-reads size/mem after storing them; this
- * version gets the same instructions but with addresses reloaded from the
- * literal pool. Probably originally the same source file as system.c.
+ * Status: matching (JP, US, EU).
+ *
+ * Copy propagation must be off: the original keeps &gHeapSmall and
+ * &gHeapMain in callee-saved registers instead of reloading them from
+ * the literal pool. The pragma does not change any other matched file,
+ * so it may have been set project-wide originally.
  */
+#pragma opt_propagation off
+
 #include "types.h"
 #include "heap.h"
 #include "game.h"
@@ -30,21 +34,25 @@ static inline void Heap_Create(HeapInfo *info)
 /* Set up the work buffer and the two game heaps from the main arena. */
 void Main_InitHeaps(void)
 {
-    HeapInfo *info;
-    void *lo;
-    void *hi;
+    HeapInfo *small;
+    HeapInfo *main;
+    u32 lo;
+    u32 hi;
 
     gGame.workBuf = func_021041b4(0, 0x10000, 4);
     func_020779ec();
     func_02006598();
 
-    info = &gHeapSmall;
-    info->size = 0x900;
-    Heap_Create(info);
+    small = &gHeapSmall;
+    small->size = 0x900;
+    Heap_Create(small);
 
-    info = &gHeapMain;
-    lo = func_02104478(0);
-    hi = func_0210448c(0);
-    info->size = ((u32)hi & ~0xF) - (((u32)lo + 0xF) & ~0xF);
-    Heap_Create(info);
+    /* The rest of the main arena, rounded inward to 16 bytes. */
+    main = &gHeapMain;
+    lo = (u32)func_02104478(0);
+    hi = (u32)func_0210448c(0);
+    lo = (lo + 0xF) & ~0xF;
+    hi = hi & ~0xF;
+    main->size = hi - lo;
+    Heap_Create(main);
 }

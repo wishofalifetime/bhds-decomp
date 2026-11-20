@@ -32,9 +32,11 @@ extern GameState gGame;
 
 /* JP: 0x02143640 */
 typedef struct UnkStruct_02143640 {
-    /* 0x00 */ u8 unk00[0x0F];
-    /* 0x0F */ u8 unk0F;
-    /* 0x10 */ u8 unk10;
+    /* 0x000 */ u8 unk000[0x0F];
+    /* 0x00F */ u8 unk0F;
+    /* 0x010 */ u8 unk10;
+    /* 0x011 */ u8 unk011[0xF74 - 0x011];
+    /* 0xF74 */ s32 unkF74[3];  /* a position, copied by script opcode 0x17 */
 } UnkStruct_02143640;
 
 extern UnkStruct_02143640 data_02143640;

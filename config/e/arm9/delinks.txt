@@ -16,6 +16,7 @@ src/system.c:
     .text start:0x020782e4 end:0x02078558
 
 src/heap.c:
+    complete
     .text start:0x02078558 end:0x02078640
 
 src/scd.c:
@@ -24,4 +25,7 @@ src/scd.c:
 
 src/scd_ops.c:
     complete
-    .text start:0x020b2684 end:0x020b2b0c
+    .text start:0x020b2684 end:0x020b3044
+
+src/scd_op17.c:
+    .text start:0x020b3044 end:0x020b3184

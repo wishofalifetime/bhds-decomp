@@ -1,18 +1,34 @@
 /*
- * scd_ops.c - room script opcode handlers 0x25-0x59 (first run).
- * JP (ABHJ) 0x020B1F5C - 0x020B23E4 (one contiguous run of handlers).
+ * scd_ops.c - room script opcode handlers.
+ * JP (ABHJ) 0x020B1F5C - 0x020B291C (one contiguous run of handlers).
+ * Opcode 0x17, which follows this run, is in scd_op17.c until it matches.
  *
  * The handlers are laid out in descending opcode order, which mwccarm
  * produces from source written in ascending order, so they appear here
- * in opcode order. Opcodes 0x55/0x56 share handlers with 0x1B/0x18 and
- * live elsewhere.
+ * in opcode order. Opcodes 0x55/0x56 reuse the 0x1B/0x18 handlers.
  */
 #include "types.h"
 #include "scd.h"
 #include "game.h"
+#include "obj.h"
 
 /* Not yet identified. JP addresses. */
 extern s32 func_020b1a2c(u8 a, u8 b);
+extern void func_020b1c14(u8 *pc);
+extern s32 func_020b341c(u8 *pc);
+extern u32 func_020b5534(u8 kind);
+extern void func_020b641c(u16 id);
+extern void func_020b7e0c(u8 a, s32 b, s32 *pos, s8 c);
+extern void func_020b7e80(u8 a, s32 b, s8 x, s8 angle, s8 c);
+extern Obj *func_02053d0c(u8 id);
+extern Obj *func_0205550c(u8 *pc, u8 slot);
+extern s32 func_02074cf0(u8 id);
+extern void func_02079544(u32 id);
+extern void func_020a00f4(Obj *obj, u32 id);
+extern void func_020a2d70(Obj *obj);
+extern void func_020a3040(u32 id, ObjModel *model, Obj *obj);
+extern void func_020f7d54(void *a, u32 b);
+extern void func_020f7f04(void *a, u32 b, u32 c);
 extern s32 func_020b35e0(void *obj, u32 id);
 extern void func_020b61c0(void);
 extern void func_020b61e4(void);
@@ -28,6 +44,7 @@ typedef struct UnkStruct_0213d628 {
     /* 0x4C */ u16 unk4C;
     /* 0x4E */ u16 unk4E;
     /* 0x50 */ u16 unk50;
+    /* 0x52 */ s16 unk52;
 } UnkStruct_0213d628;
 
 typedef struct UnkStruct_0213d4a6 {
@@ -52,6 +69,269 @@ extern u8 data_0213b7ac[];                 /* JP 0x0213B7AC */
 extern u8 data_0213b8ce[][0x20];           /* JP 0x0213B8CE */
 extern UnkStruct_0213d4a6 data_0213d4a6[]; /* JP 0x0213D4A6 */
 extern UnkStruct_0213d628 data_0213d628;   /* JP 0x0213D628 */
+
+typedef struct UnkStruct_0213a71c {
+    /* 0x00 */ u8 unk00[0x08];
+    /* 0x08 */ u8 unk08;
+    /* 0x09 */ u8 unk09[0x16 - 0x09];
+    /* 0x16 */ s16 unk16;
+    /* 0x18 */ s16 unk18;
+} UnkStruct_0213a71c;
+
+typedef struct UnkSub_0214b640 {
+    /* 0x00 */ u8 unk00[2];
+    /* 0x02 */ u8 unk02;
+} UnkSub_0214b640;
+
+typedef struct UnkStruct_0214b640 {
+    /* 0x000 */ u8 unk000[0x7A9];
+    /* 0x7A9 */ u8 unk7A9;
+    /* 0x7AA */ u8 unk7AA;
+    /* 0x7AB */ u8 unk7AB;
+    /* 0x7AC */ UnkSub_0214b640 *unk7AC;
+} UnkStruct_0214b640;
+
+typedef struct UnkStruct_0214c9e8 {
+    /* 0x00 */ u8 unk00[0x08];
+    /* 0x08 */ u8 unk08;
+} UnkStruct_0214c9e8;
+
+extern u16 data_02122084[];                /* JP 0x02122084 */
+extern UnkStruct_0213a71c data_0213a71c;   /* JP 0x0213A71C */
+extern u8 data_0214459c[];                 /* JP 0x0214459C */
+extern UnkStruct_0214b640 data_0214b640;   /* JP 0x0214B640 */
+extern UnkStruct_0214c9e8 *data_0214c9e8[]; /* JP 0x0214C9E8 */
+extern Obj *data_0214d56c[];               /* JP 0x0214D56C, 64 object slots */
+extern Obj *data_027e000c;                 /* DTCM: last spawned object */
+extern s32 data_027e0054[3];               /* DTCM: position scratch */
+
+/* 0x18 (also 0x56): 26-byte instruction handled by func_020b1c14. */
+s32 Scd_Op18(void)
+{
+    u8 *pc = gScd.pc;
+
+    gScd.pc = pc + 0x1A;
+    func_020b1c14(pc);
+    return TRUE;
+}
+
+/* 0x19 idx, value */
+s32 Scd_Op19(void)
+{
+    u8 *pc;
+    u8 idx;
+    u8 value;
+    UnkStruct_0214c9e8 *entry;
+
+    pc = gScd.pc;
+    idx = pc[1];
+    value = pc[2];
+    gScd.pc = pc + 4;
+    entry = data_0214c9e8[idx];
+    entry->unk08 = value;
+    return TRUE;
+}
+
+/* 0x1A id: TRUE if func_02074cf0(id) finds something. */
+s32 Scd_Op1A(void)
+{
+    u8 *pc = gScd.pc;
+    u8 id;
+
+    id = pc[1];
+    gScd.pc = pc + 2;
+    return func_02074cf0(id) != -1;
+}
+
+void Scd_OnSpawn(u32 kind);
+
+/* 0x1B (also 0x55): spawn an object from a 22-byte instruction. */
+s32 Scd_Op1B(void)
+{
+    u8 *pc = gScd.pc;
+
+    gScd.pc = pc + 0x16;
+    if (pc[3] == 0xFF || !func_020b341c(pc)) {
+        Obj *obj = func_0205550c(pc, pc[0x12] & 0xF);
+        data_027e000c = obj;
+        Scd_OnSpawn(obj->kind);
+    }
+    return TRUE;
+}
+
+/* Called after opcode 0x1B spawns an object of the given kind. */
+void Scd_OnSpawn(u32 kind)
+{
+    func_02079544(0);
+    switch (kind) {
+    case 0:
+    case 1:
+    case 0x11:
+    case 0x16:
+        func_02079544(4);
+        func_02079544(0x20);
+        break;
+    case 2:
+        func_02079544(4);
+        break;
+    case 3:
+    case 4:
+        func_02079544(0x1E);
+        break;
+    case 5:
+        func_02079544(0x1C);
+        return;
+    case 6:
+    case 10:
+        break;
+    case 8:
+        func_02079544(0x1E);
+        return;
+    case 9:
+        func_02079544(0x1D);
+        break;
+    default:
+        return;
+    }
+    func_02079544(3);
+}
+
+/* 0x1C a, s16 b, flags */
+s32 Scd_Op1C(void)
+{
+    u8 *pc = gScd.pc;
+    u8 flags;
+    u8 a;
+    s16 b;
+
+    flags = pc[4];
+    a = pc[1];
+    b = *(s16 *)(pc + 2);
+    gScd.pc = pc + 6;
+    data_0213a71c.unk08 = a;
+    data_0213a71c.unk18 = b;
+    data_0214b640.unk7AB = (flags & 1) ? 0xFF : 0;
+    data_0214b640.unk7AA = (flags & 2) ? 0xFF : 0;
+    data_0214b640.unk7A9 = (flags & 4) ? 0xFF : 0;
+    if (data_0213a71c.unk18 != 0) {
+        data_0213a71c.unk16 = data_0213a71c.unk18 > 0 ? 0 : 0x7FFF;
+    }
+    return TRUE;
+}
+
+/* 0x1E ?, a, idx: func_020b641c(a + data_02122084[idx]). */
+s32 Scd_Op1E(void)
+{
+    u8 *pc;
+    u8 idx;
+    u8 a;
+    u16 b;
+
+    pc = gScd.pc;
+    idx = pc[3];
+    a = pc[2];
+    gScd.pc = pc + 4;
+    b = data_02122084[idx];
+    func_020b641c(a + b);
+    return TRUE;
+}
+
+/*
+ * Object model ids. The US and EU versions have one more model, inserted
+ * below 0xF2, so every id from there on is one higher than in JP.
+ */
+#ifdef VERSION_JP
+#define OBJ_MODEL_COUNT     0x1C5
+#define OBJ_MODEL_SPECIAL   0xF2
+#define OBJ_MODEL_TRACKED_LO 0xF3
+#define OBJ_MODEL_TRACKED_HI 0xFF
+#else
+#define OBJ_MODEL_COUNT     0x1C6
+#define OBJ_MODEL_SPECIAL   0xF3
+#define OBJ_MODEL_TRACKED_LO 0xF4
+#define OBJ_MODEL_TRACKED_HI 0x100
+#endif
+
+/* 0x1F: create a scene object from a 28-byte instruction. */
+s32 Scd_Op1F(void)
+{
+    u8 *pc = gScd.pc;
+    Obj *obj;
+    u8 parent;
+    u32 id;
+
+    gScd.pc = pc + 0x1C;
+    obj = data_0214d56c[pc[1] & 0x3F];
+    parent = pc[3];
+    switch (parent) {
+    case 0xFF:
+        obj->parent = NULL;
+        break;
+    case 0xFE:
+        obj->parent = data_0214459c;
+        break;
+    default:
+        if (parent < 0x80) {
+            obj->parent = (u8 *)data_0214d56c[parent] + 0x18;
+        } else {
+            obj->parent = (u8 *)func_02053d0c(parent & 0x7F) + 0x18;
+        }
+        break;
+    }
+
+    obj->unk07 = 0;
+    obj->unk08 = pc[2];
+    obj->kind = pc[1] & 0x7F;
+    obj->unk42 = 0;
+    obj->unk4E = *(s16 *)(pc + 0xA);
+    obj->unk44 = obj->unk4E;
+    obj->unk46 = 0;
+    obj->unk0C = &obj->unk94;
+    obj->unk94 = 0x8000;
+    obj->unk96 = *(u16 *)(pc + 0x18);
+    obj->unk98 = *(u16 *)(pc + 0x16);
+    obj->unk9A = *(u16 *)(pc + 0x1A);
+    obj->unk9C = *(u16 *)(pc + 0x16);
+    obj->unk9E = *(u16 *)(pc + 0x14);
+    obj->unkA0 = *(s16 *)(pc + 0xC);
+    obj->unkA4 = *(s16 *)(pc + 0xE);
+    obj->unkA8 = *(s16 *)(pc + 0x10);
+    obj->unkAC = *(s16 *)(pc + 0x12);
+    obj->initX = *(s16 *)(pc + 4);
+    obj->posX = obj->initX;
+    obj->initY = *(s16 *)(pc + 6);
+    obj->posY = obj->initY;
+    obj->initZ = *(s16 *)(pc + 8);
+    obj->posZ = obj->initZ;
+    obj->unk50 = 0x7FFF;
+
+    id = func_020b5534(obj->kind);
+    if (id < OBJ_MODEL_COUNT) {
+        func_020a00f4(obj, id);
+        func_020f7d54(obj->model->unk0C, 0xB);
+        if (id == OBJ_MODEL_SPECIAL) {
+            func_020f7f04(obj->model->unk0C, 2, 0x2B);
+        }
+        func_020a3040(id, obj->model, obj);
+        func_020a2d70(obj);
+        if (id >= OBJ_MODEL_TRACKED_LO && id <= OBJ_MODEL_TRACKED_HI) {
+            data_0213d628.unk52 = obj->posY;
+        }
+    } else {
+        obj->model = NULL;
+    }
+
+    if ((obj->kind & 0xF) >= data_0214b640.unk7AC->unk02) {
+        data_0214b640.unk7AC->unk02 = (obj->kind & 0xF) + 1;
+    }
+    gScd.objCount++;
+    obj->flags = 0x40000000;
+    if (pc[2] & 0x10) {
+        obj->flags |= 0x40;
+        obj->unk07 = 1;
+    }
+    return TRUE;
+}
 
 /* 0x25 ?, arg, on: call one of two functions with arg. */
 s32 Scd_Op25(void)

@@ -21,9 +21,13 @@ typedef struct ScdState {
     /* 0x054 */ u8 unk054[0x247 - 0x54];
     /* 0x247 */ u8 unk247;       /* set by opcode 0x29 */
     /* 0x248 */ u8 depth;        /* nesting level */
-    /* 0x249 */ u8 unk249[0x24E - 0x249];
+    /* 0x249 */ u8 unk249;
+    /* 0x24A */ u8 objCount;     /* incremented by opcode 0x1F */
+    /* 0x24B */ u8 unk24B[0x24E - 0x24B];
     /* 0x24E */ u8 testKind;     /* set by opcode 0x53 */
     /* 0x24F */ u8 testValue;    /* compared by opcode 0x54 */
+    /* 0x250 */ u8 unk250[0x8C8 - 0x250];
+    /* 0x8C8 */ u8 unk8C8;       /* set by opcode 0x17 */
 } ScdState;
 
 /* A running script. Only the fields used so far are known. */
