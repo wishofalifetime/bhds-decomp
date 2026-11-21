@@ -101,15 +101,19 @@ typedef struct EnemyObj {
     /* 0x091 */ u8 unk091;
     /* 0x092 */ u8 range;        /* index into the range tables */
     /* 0x093 */ u8 unk093;
-    /* 0x094 */ u8 unk094[0x98 - 0x94];
+    /* 0x094 */ s16 unk094;
+    /* 0x096 */ u8 unk096;
+    /* 0x097 */ u8 unk097;
     /* 0x098 */ u8 unk098;
-    /* 0x099 */ u8 unk099[0xA1 - 0x99];
+    /* 0x099 */ u8 unk099[0xA0 - 0x99];
+    /* 0x0A0 */ u8 unk0A0;
     /* 0x0A1 */ u8 state;
     /* 0x0A2 */ u8 subState;
     /* 0x0A3 */ u8 unk0A3;
     /* 0x0A4 */ u8 unk0A4[2];
     /* 0x0A6 */ s16 speed;
-    /* 0x0A8 */ u8 unk0A8[0xB0 - 0xA8];
+    /* 0x0A8 */ s16 timer;
+    /* 0x0AA */ u8 unk0AA[0xB0 - 0xAA];
     /* 0x0B0 */ s32 unkB0;
     /* 0x0B4 */ s32 unkB4;
     /* 0x0B8 */ s32 unkB8;
@@ -146,6 +150,7 @@ void Enemy_CheckState(void);
 void Enemy_UpdateRange(void);
 void Enemy_Reset(void);
 void Enemy_SetAnim(u32 anim);
+void Enemy_Init(u32 arg);
 u8 Enemy_Animate(u8 mode, s16 speed);
 
 #endif /* BHDS_ENEMY_H */

@@ -131,3 +131,7 @@ src/enemy_act.c:
 src/enemy_gfx.c:
     complete
     .text start:0x020bb780 end:0x020bba24
+
+src/enemy_die.c:
+    complete
+    .text start:0x020bba24 end:0x020bc22c

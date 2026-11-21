@@ -12,7 +12,7 @@
 
 /* Not yet identified. JP addresses. */
 extern void func_01ffabf8(void *list, EnemyObj *obj);
-extern void func_01ffbe38(s32 *pos, u16 value);
+extern s32 func_01ffbe38(s32 *pos, u16 value);
 extern void func_01ffd5dc(void);
 extern s32 func_020599f8(EnemyObj *obj);
 extern u32 func_02059a9c(EnemyObj *obj, u8 state);
@@ -20,7 +20,7 @@ extern u8 func_02073e30(s32 x, s32 z);
 extern void func_02075c90(void *dst, s32 a, s32 b);
 extern void func_020a00bc(EnemyObj *obj, u8 bank, u8 anim);
 extern void func_020a2c88(EnemyObj *obj);
-extern void func_020ad5ac(void);
+extern void func_020ad5ac(u32 arg);
 extern void func_020d908c(void);
 
 extern u16 data_02121864[];               /* JP 0x02121864: animation bank by kind */
@@ -62,12 +62,12 @@ void Enemy_Hit(void)
     }
 }
 
-void Enemy_Init(void)
+void Enemy_Init(u32 arg)
 {
     u32 anim;
     u8 sub;
 
-    func_020ad5ac();
+    func_020ad5ac(arg);
     data_027e000c->unk080 = 0;
     data_027e000c->unk083 = 0x16;
     data_027e000c->unk082 = 1;
