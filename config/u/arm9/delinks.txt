@@ -187,3 +187,7 @@ src/file_draw.c:
 
 src/file_list.c:
     .text start:0x020beb20 end:0x020bed7c
+
+src/file_scroll.c:
+    complete
+    .text start:0x020bf048 end:0x020bf318
