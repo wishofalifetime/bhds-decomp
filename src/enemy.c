@@ -30,11 +30,11 @@ void Enemy_MoveForward(s16 speed)
 
 void Enemy_StartIdle(void)
 {
-    data_027e000c->timer = ((MATH_Rand32(&data_027e0064, 0) & 0x18) + 0x30) >> 1;
-    data_027e000c->unk180 = 0;
-    data_027e000c->unk181 = 0;
-    data_027e000c->unk182 = 0;
-    data_027e000c->unk183 = 0;
+    ENEMY_WORK(data_027e000c)->timer = ((MATH_Rand32(&data_027e0064, 0) & 0x18) + 0x30) >> 1;
+    ENEMY_WORK(data_027e000c)->unk04 = 0;
+    ENEMY_WORK(data_027e000c)->unk05 = 0;
+    ENEMY_WORK(data_027e000c)->unk06 = 0;
+    ENEMY_WORK(data_027e000c)->unk07 = 0;
     data_027e000c->anim = 0x10;
     data_027e000c->unkB0 = 0;
     data_027e000c->unkB4 = 0;
@@ -53,16 +53,14 @@ void Enemy_Wander(u32 arg)
     u8 c;
     u8 d;
     EnemyObj *e;
-    u8 *w;
 
     data_027e000c->anim = 0x33;
     mask = (((arg & 1) ^ 1) + 1) * 4 - 1;
-    w = data_027e000c->unk17C;
-    w[3]--;
-    if (data_027e000c->timer != 0) {
+    ENEMY_WORK(data_027e000c)->timer--;
+    if (ENEMY_WORK(data_027e000c)->timer != 0) {
         return;
     }
-    data_027e000c->timer = (MATH_Rand32(&data_027e0064, 0) & 0x18) + 0x30;
+    ENEMY_WORK(data_027e000c)->timer = (MATH_Rand32(&data_027e0064, 0) & 0x18) + 0x30;
     r = MATH_Rand32(&data_027e0064, 0);
     a = r & mask;
     b = (r >> 4) & 7;
@@ -70,10 +68,10 @@ void Enemy_Wander(u32 arg)
     d = (r >> 12) & 0x18;
 
     e = data_027e000c;
-    if (e->unk180 == a || ((e->unk180 | a) & 3) == 0) {
+    if (ENEMY_WORK(e)->unk04 == a || ((ENEMY_WORK(e)->unk04 | a) & 3) == 0) {
         a = (a + 1) & mask;
     }
-    e->unk180 = a;
+    ENEMY_WORK(e)->unk04 = a;
     data_027e000c->unkB4 = (a & 3) * 0x60;
     if (!(a & 4)) {
         data_027e000c->unkB4 = -data_027e000c->unkB4;
@@ -81,35 +79,35 @@ void Enemy_Wander(u32 arg)
     data_027e000c->unkB4 &= 0xFFF;
 
     e = data_027e000c;
-    if (e->unk181 == b || ((e->unk181 | b) & 3) == 0) {
+    if (ENEMY_WORK(e)->unk05 == b || ((ENEMY_WORK(e)->unk05 | b) & 3) == 0) {
         b = (b + 1) & 7;
     }
-    e->unk181 = b;
+    ENEMY_WORK(e)->unk05 = b;
     data_027e000c->unkB0 = (b & 3) * 0xA0;
     if (b & 4) {
         data_027e000c->unkB0 = -data_027e000c->unkB0;
     }
     data_027e000c->unkB0 &= 0xFFF;
 
-    if (data_027e000c->unk182 == c) {
+    if (ENEMY_WORK(data_027e000c)->unk06 == c) {
         c = (c + 8) & 0x18;
     }
-    data_027e000c->unk182 = c;
+    ENEMY_WORK(data_027e000c)->unk06 = c;
     data_027e000c->unkBE = c + 0x14;
-    if (data_027e000c->unk183 == d) {
+    if (ENEMY_WORK(data_027e000c)->unk07 == d) {
         d = (d + 8) & 0x18;
     }
-    data_027e000c->unk183 = d;
+    ENEMY_WORK(data_027e000c)->unk07 = d;
     data_027e000c->unkBD = d + 0x28;
 }
 
 void Enemy_StartWander(s32 x, s32 z)
 {
-    data_027e000c->timer = ((MATH_Rand32(&data_027e0064, 0) & 0x18) + 0x30) >> 1;
-    data_027e000c->unk180 = 0;
-    data_027e000c->unk181 = 0;
-    data_027e000c->unk182 = 0;
-    data_027e000c->unk183 = 0;
+    ENEMY_WORK(data_027e000c)->timer = ((MATH_Rand32(&data_027e0064, 0) & 0x18) + 0x30) >> 1;
+    ENEMY_WORK(data_027e000c)->unk04 = 0;
+    ENEMY_WORK(data_027e000c)->unk05 = 0;
+    ENEMY_WORK(data_027e000c)->unk06 = 0;
+    ENEMY_WORK(data_027e000c)->unk07 = 0;
     data_027e000c->anim = 0x11;
     data_027e000c->unkB0 = x;
     data_027e000c->unkB4 = 0;

@@ -118,4 +118,8 @@ src/enemy.c:
     .text start:0x020ba5b4 end:0x020baa74
 
 src/enemy_turn.c:
-    .text start:0x020baa74 end:0x020bac80
+    .text start:0x020baa74 end:0x020bae84
+
+src/enemy_ai.c:
+    complete
+    .text start:0x020bae84 end:0x020bb2b8
