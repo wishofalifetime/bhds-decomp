@@ -24,7 +24,8 @@ typedef struct GameState {
     /* 0xB5 */ u8 unkB5;
     /* 0xB6 */ u8 unkB6;
     /* 0xB7 */ u8 unkB7;
-    /* 0xB8 */ u8 unkB8[0xC8 - 0xB8];
+    /* 0xB8 */ u8 *unkB8;      /* [0]: a count checked by the reward scene */
+    /* 0xBC */ u8 unkBC[0xC8 - 0xBC];
     /* 0xC8 */ void *workBuf;   /* 0x10000 bytes from the main arena */
 } GameState; /* size 0xCC */
 

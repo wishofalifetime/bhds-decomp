@@ -155,7 +155,7 @@ void Hud_UpdateWave(void)
 
 void Hud_SetWave(HudWaveParam *p)
 {
-    if ((s32)(2.6 * data_0213a680.timer) % 0x73 < 3) {
+    if ((u16)(2.6 * data_0213a680.timer) % 0x73 < 3) {
         data_0213a680.unk1F = p->unk02;
         data_0213a680.unk20 = p->unk03;
     }

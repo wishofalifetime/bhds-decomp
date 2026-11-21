@@ -40,7 +40,9 @@ typedef struct UnkEntry_0213b850 {
 } UnkEntry_0213b850;
 
 typedef struct UnkStruct_0213b750 {
-    /* 0x000 */ u8 unk000[0x44];
+    /* 0x000 */ u8 unk000[0x10];
+    /* 0x010 */ u32 playTime;     /* frames */
+    /* 0x014 */ u8 unk014[0x44 - 0x14];
     /* 0x044 */ u32 flags;          /* bits 0-1 set by opcode 0x0F, bit 20 by 0x09/0x0A */
     /* 0x048 */ u32 flags2;         /* bits 17 and 28 checked by the BGM code */
     /* 0x04C */ u8 unk04C[0x100 - 0x4C];

@@ -61,7 +61,7 @@ void Hud_DrawWave(void)
     u16 skip = 4;
     HudSprite spr;
 
-    n = (s32)(4.0 * data_0213a680.timer) % 0x51;
+    n = (u16)(4.0 * data_0213a680.timer) % 0x51;
     for (i = 0; n != 0 && i < 0x21; n--, i++) {
         if (n >= 0x30) {
             if (skip != 0) {
@@ -73,7 +73,7 @@ void Hud_DrawWave(void)
             skip--;
             alpha = 0x1D;
         } else {
-            alpha = 0x1D - (s32)(29.0 * (i - 0.2 * 24) / (1.2 * 24));
+            alpha = 0x1D - (u8)(29.0 * (i - 0.2 * 24) / (1.2 * 24));
         }
         func_02105c14(&spr, 0, sizeof(spr));
         spr.alpha = alpha;

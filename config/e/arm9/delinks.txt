@@ -169,3 +169,10 @@ src/exam_act.c:
 src/exam_scene.c:
     complete
     .text start:0x020bdda4 end:0x020be388
+
+src/reward.c:
+    complete
+    .text start:0x020be388 end:0x020be804
+
+src/reward_restart.c:
+    .text start:0x020be804 end:0x020be85c
