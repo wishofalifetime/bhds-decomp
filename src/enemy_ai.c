@@ -25,7 +25,6 @@ typedef struct EnemyRangeNext {
 extern u32 Sqrt(u32 x);  /* BIOS call stub, Thumb */
 extern s16 func_0201de04(s32 x, s32 z);  /* angle from the object to (x, z) */
 extern void func_0205516c(u32 id);
-extern void func_020bb2e8(u32 anim);
 
 extern EnemyRange data_02124228[];        /* JP 0x02124228 */
 extern EnemyRangeNext data_02124220[];    /* JP 0x02124220 */
@@ -41,7 +40,7 @@ void Enemy_Act2(void)
             data_027e000c->subState = 0;
             data_027e000c->unk0A3 = 0;
             data_027e000c->unk098 = 7;
-            func_020bb2e8(0x8002);
+            Enemy_SetAnim(0x8002);
         }
     }
     if ((u32)(ENEMY_WORK(data_027e000c)->targetRotY + 0x180 - data_027e000c->rotY) <= 0x300) {
@@ -66,7 +65,7 @@ void Enemy_Act1(void)
             data_027e000c->subState = 0;
             data_027e000c->unk0A3 = 0;
             data_027e000c->unk098 = 7;
-            func_020bb2e8(0x8005);
+            Enemy_SetAnim(0x8005);
         }
         Enemy_TurnToTarget(0x60);
         Enemy_MoveForward(0xD2);
@@ -76,7 +75,7 @@ void Enemy_Act1(void)
             data_027e000c->subState = 0;
             data_027e000c->unk0A3 = 0;
             data_027e000c->unk098 = 7;
-            func_020bb2e8(0x8002);
+            Enemy_SetAnim(0x8002);
         }
         Enemy_TurnToTarget(0x30);
         if ((u32)(ENEMY_WORK(data_027e000c)->targetRotY + 0x200 - data_027e000c->rotY) <= 0x400) {
@@ -99,7 +98,7 @@ void Enemy_Act0(void)
             data_027e000c->subState = 0;
             data_027e000c->unk0A3 = 0;
             data_027e000c->unk098 = 7;
-            func_020bb2e8(0x8003);
+            Enemy_SetAnim(0x8003);
         }
         Enemy_TurnToTarget(0x30);
         Enemy_MoveForward(-0x3C);
@@ -110,7 +109,7 @@ void Enemy_Act0(void)
             data_027e000c->subState = 0;
             data_027e000c->unk0A3 = 0;
             data_027e000c->unk098 = 7;
-            func_020bb2e8(0x8002);
+            Enemy_SetAnim(0x8002);
         }
         ENEMY_WORK(data_027e000c)->targetRotY += 0x800;
         ENEMY_WORK(data_027e000c)->targetRotY &= 0xFFF;

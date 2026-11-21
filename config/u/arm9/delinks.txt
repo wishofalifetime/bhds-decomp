@@ -123,3 +123,7 @@ src/enemy_turn.c:
 src/enemy_ai.c:
     complete
     .text start:0x020bae84 end:0x020bb2b8
+
+src/enemy_act.c:
+    complete
+    .text start:0x020bb2b8 end:0x020bb780

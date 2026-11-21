@@ -6,7 +6,9 @@
 
 /* Movement work area of an enemy (EnemyObj.work). */
 typedef struct EnemyWork {
-    /* 0x00 */ u8 unk00[3];
+    /* 0x00 */ u8 flags;
+    /* 0x01 */ u8 unk01;
+    /* 0x02 */ u8 count;
     /* 0x03 */ u8 timer;
     /* 0x04 */ u8 unk04;
     /* 0x05 */ u8 unk05;
@@ -17,17 +19,46 @@ typedef struct EnemyWork {
     /* 0x0A */ s16 targetRotY;
 } EnemyWork;
 
+/* Animation state reached through the object's model. */
+typedef struct EnemyAnimData {
+    /* 0x00 */ u8 unk00[4];
+    /* 0x04 */ u16 frameCount;
+} EnemyAnimData;
+
+typedef struct EnemyAnim {
+    /* 0x00 */ s32 frame;        /* 20.12 fixed point */
+    /* 0x04 */ u32 unk04;
+    /* 0x08 */ EnemyAnimData *data;
+} EnemyAnim;
+
+typedef struct EnemyModel {
+    /* 0x00 */ u8 unk00[0x10];
+    /* 0x10 */ EnemyAnim *anim;
+} EnemyModel;
+
 /* The object fields used here. Overlaps Obj (obj.h), which is still partial. */
 typedef struct EnemyObj {
-    /* 0x000 */ u8 unk000[9];
+    /* 0x000 */ EnemyModel *model;
+    /* 0x004 */ u16 animId;
+    /* 0x006 */ u8 unk006;
+    /* 0x007 */ s8 unk007;
+    /* 0x008 */ u8 unk008;
     /* 0x009 */ u8 kind;
-    /* 0x00A */ u8 unk00A[0x30 - 0xA];
+    /* 0x00A */ u8 unk00A[2];
+    /* 0x00C */ u16 *unk00C;
+    /* 0x010 */ u8 unk010[0x30 - 0x10];
     /* 0x030 */ s32 posX;
     /* 0x034 */ s32 posY;
     /* 0x038 */ s32 posZ;
     /* 0x03C */ u8 unk03C[0x44 - 0x3C];
     /* 0x044 */ s16 rotY;
-    /* 0x046 */ u8 unk046[0x91 - 0x46];
+    /* 0x046 */ u8 unk046[0x54 - 0x46];
+    /* 0x054 */ u8 unk054[0x80 - 0x54];
+    /* 0x080 */ s16 unk080;
+    /* 0x082 */ u8 unk082;
+    /* 0x083 */ u8 unk083;
+    /* 0x084 */ u8 unk084;
+    /* 0x085 */ u8 unk085[0x91 - 0x85];
     /* 0x091 */ u8 unk091;
     /* 0x092 */ u8 range;        /* index into the range tables */
     /* 0x093 */ u8 unk093;
@@ -46,7 +77,11 @@ typedef struct EnemyObj {
     /* 0x0BC */ u8 anim;
     /* 0x0BD */ u8 unkBD;
     /* 0x0BE */ u8 unkBE;
-    /* 0x0BF */ u8 unk0BF[0x176 - 0xBF];
+    /* 0x0BF */ u8 unk0BF[0xC1 - 0xBF];
+    /* 0x0C1 */ s8 unk0C1;
+    /* 0x0C2 */ u8 unk0C2[0xC6 - 0xC2];
+    /* 0x0C6 */ s16 unk0C6;
+    /* 0x0C8 */ u8 unk0C8[0x176 - 0xC8];
     /* 0x176 */ s16 destX;
     /* 0x178 */ s16 destZ;
     /* 0x17A */ u8 unk17A[2];
@@ -67,5 +102,9 @@ void Enemy_Wander(u32 arg);
 void Enemy_MoveForward(s16 speed);
 void Enemy_TurnToTarget(s32 step);
 u8 Enemy_InZoneOverlap(s32 axis, s16 x, s16 z);
+void Enemy_CheckState(void);
+void Enemy_UpdateRange(void);
+void Enemy_Reset(void);
+void Enemy_SetAnim(u32 anim);
 
 #endif /* BHDS_ENEMY_H */
