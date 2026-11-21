@@ -7,6 +7,7 @@
  * in reverse source order).
  */
 #include "types.h"
+#include "mi.h"
 #include "hw_regs.h"
 #include "g3.h"
 
@@ -74,7 +75,6 @@ typedef struct UnkDtcm_027e01bc {
 extern void func_01ffcab4(G3dModel *model);  /* ITCM */
 extern u8 func_02076974(u32 a);
 extern u8 func_02076bc8(u32 a, u8 *out);
-extern void func_02105aac(u16 value, void *dst, u32 size);  /* probably MI_CpuFill16 */
 
 extern G3dVramEntry data_0213bf20[];         /* JP 0x0213BF20: textures */
 extern G3dVramEntry data_0213ba20[];         /* JP 0x0213BA20: palettes */
@@ -101,9 +101,7 @@ void G3d_ClearRows(u32 which, u8 row, u8 count)
     }
     base = data_0213ec68 + which * 0x800;
     while (count != 0) {
-        volatile u16 zero = 0;
-
-        func_02105aac(zero, base + row * 0x40, 0x40);
+        MI_CpuClear16(base + row * 0x40, 0x40);
         row = (row + 1) & 0x1F;
         count--;
     }

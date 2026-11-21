@@ -154,3 +154,14 @@ src/choice_draw.c:
 src/choice_scene.c:
     complete
     .text start:0x020bca10 end:0x020bd030
+
+src/exam.c:
+    complete
+    .text start:0x020bd030 end:0x020bd47c
+
+src/exam_take.c:
+    .text start:0x020bd47c end:0x020bd4f4
+
+src/exam_act.c:
+    complete
+    .text start:0x020bd4f4 end:0x020bd664

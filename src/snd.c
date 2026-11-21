@@ -11,6 +11,7 @@
  * in reverse source order).
  */
 #include "types.h"
+#include "mi.h"
 #include "snd.h"
 
 /* Not yet identified. JP addresses. */
@@ -32,7 +33,6 @@ extern void *func_020f2c80(void *heap, u32 size);
 extern void func_020fc3bc(void);
 extern void func_020fc3f0(void);
 extern void *func_021041b4(u32 arena, u32 size, u32 align);
-extern void func_02105aac(u16 value, void *dst, u32 size);  /* probably MI_CpuFill16 */
 extern void Snd_Stop(u8 kind, s32 id);
 extern void Snd_StopAll(void);
 extern u32 Snd_GetMaxSize(u32 lo, u32 hi);
@@ -72,9 +72,7 @@ void Snd_Trace(u32 line)
 
 void Snd_InitSystem(void)
 {
-    volatile u16 zero = 0;
-
-    func_02105aac(zero, &data_0213a548, sizeof(SndStream));
+    MI_CpuClear16(&data_0213a548, sizeof(SndStream));
     data_0213a548.driverMem = func_021041b4(0, func_0200da14(), 0x20);
     func_020fc3f0();
     func_0200da20(2, data_0213a548.driverMem);

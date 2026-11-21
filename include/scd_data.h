@@ -183,12 +183,23 @@ typedef struct UnkStruct_02147640 {
 extern UnkEntry_02147d0c data_02147d0c[];  /* JP 0x02147D0C */
 extern UnkStruct_02147640 data_02147640;   /* JP 0x02147640 */
 
+/* A 3D model shown by a scene (data_0213b214.model). */
+typedef struct SceneAnim {
+    /* 0x00 */ s32 frame;        /* 20.12 fixed point */
+} SceneAnim;
+
+typedef struct SceneModel {
+    /* 0x00 */ u8 unk00[0x10];
+    /* 0x10 */ SceneAnim *anim;
+} SceneModel;
+
 typedef struct UnkStruct_0213b214 {
     /* 0x00 */ u8 unk00;
     /* 0x01 */ u8 unk01;
     /* 0x02 */ u8 unk02;
     /* 0x03 */ u8 unk03;
-    /* 0x04 */ u8 unk04[0x09 - 0x04];
+    /* 0x04 */ u8 unk04[0x08 - 0x04];
+    /* 0x08 */ u8 slot;          /* inventory slot of the item */
     /* 0x09 */ u8 itemId;        /* item being used */
     /* 0x0A */ u8 unk0A[0x16 - 0x0A];
     /* 0x16 */ u8 unk16;
@@ -199,15 +210,21 @@ typedef struct UnkStruct_0213b214 {
     /* 0x20 */ u8 state;         /* scene state (1: running, 2: leaving) */
     /* 0x21 */ u8 unk21;
     /* 0x22 */ u8 unk22;
-    /* 0x23 */ u8 unk23[0x26 - 0x23];
+    /* 0x23 */ u8 unk23;
+    /* 0x24 */ u8 unk24;
+    /* 0x25 */ u8 unk25;
     /* 0x26 */ u16 speed;        /* scroll step per frame, 8.8 fixed */
-    /* 0x28 */ u8 unk28[0x4C - 0x28];
+    /* 0x28 */ s32 unk28;
+    /* 0x2C */ u8 unk2C[0x4C - 0x2C];
     /* 0x4C */ void *work;       /* scene work area */
     /* 0x50 */ u8 unk50[0x80 - 0x50];
     /* 0x80 */ u32 unk80;
     /* 0x84 */ u8 unk84[0x94 - 0x84];
     /* 0x94 */ u8 unk94;         /* set by opcode 0x33 cmd 12 */
-    /* 0x95 */ u8 unk95[0x278 - 0x95];
+    /* 0x95 */ u8 unk95[0x258 - 0x95];
+    /* 0x258 */ struct SceneModel *model;
+    /* 0x25C */ u8 unk25C[0x274 - 0x25C];
+    /* 0x274 */ s32 unk274;
     /* 0x278 */ u8 unk278;
     /* 0x279 */ u8 unk279;
 } UnkStruct_0213b214;

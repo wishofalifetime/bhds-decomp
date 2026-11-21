@@ -1,9 +1,9 @@
 /*
  * choice_draw.c - drawing and moving the two-sided screen's markers, and
  * leaving to the next scene.
- * JP (ABHJ) 0x020BC6CC - 0x020BCA10. Not matching yet: in Choice_Draw and
- * Choice_Start the original converts constant arguments (a u16 0 through
- * the stack, a u8 1 with and #0xFF) where our build folds them; in
+ * JP (ABHJ) 0x020BC6CC - 0x020BCA10. Not matching yet: in
+ * Choice_Start the original converts a constant argument (a u8 1 with
+ * and #0xFF) where our build folds it; in
  * Choice_Exit the original does not if-convert the scene assignments and
  * keeps two pool entries for func_020d6468.
  *
@@ -12,6 +12,7 @@
  */
 #include "types.h"
 #include "choice.h"
+#include "mi.h"
 #include "game.h"
 
 typedef struct UnkStruct_0213a900 {
@@ -32,21 +33,9 @@ extern UnkStruct_0213a900 data_0213a900;  /* JP 0x0213A900 */
 extern void func_020062ac(u32 layer, ChoiceSprite *spr);
 extern void func_02091a88(u32 a, void *b, u32 c, u32 d);
 extern void func_020bf378(u32 a);
-extern void func_02105aac(u16 data, void *dst, u32 size);  /* MIi_CpuClear16 */
 
 extern ChoicePos data_02124394[];         /* JP 0x02124394: button positions */
 extern u8 data_0213f168[];                /* JP 0x0213F168 */
-
-/* NitroSDK MI_CpuFill16 / MI_CpuClear16 */
-static inline void MI_CpuFill16(void *dest, u16 data, u32 size)
-{
-    func_02105aac(data, dest, size);
-}
-
-static inline void MI_CpuClear16(void *dest, u32 size)
-{
-    MI_CpuFill16(dest, 0, size);
-}
 
 static inline u32 Choice_Attr(u8 a)
 {
