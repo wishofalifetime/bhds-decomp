@@ -203,3 +203,7 @@ src/file_read.c:
 
 src/file_col.c:
     .text start:0x020bf1f8 end:0x020bf2b0
+
+src/file_list2.c:
+    complete
+    .text start:0x020bf2b0 end:0x020bf96c

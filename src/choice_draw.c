@@ -32,7 +32,7 @@ extern u16 data_0213a708;                 /* JP 0x0213A708: nonzero while fading
 extern UnkStruct_0213a900 data_0213a900;  /* JP 0x0213A900 */
 extern void func_020062ac(u32 layer, ChoiceSprite *spr);
 extern void func_02091a88(u32 a, void *b, u32 c, u32 d);
-extern void func_020bf378(u32 a);
+extern void TextBuf_Clear(u32 a);
 
 extern ChoicePos data_02124394[];         /* JP 0x02124394: button positions */
 extern u8 data_0213f168[];                /* JP 0x0213F168 */
@@ -84,7 +84,7 @@ void Choice_Start(void)
     } else {
         w->unk44 = 1;
     }
-    func_020bf378(0);
+    TextBuf_Clear(0);
     func_02091a88(kind | 0xE700, data_0213f168, 0x40, Choice_Attr(1));
 }
 

@@ -30,7 +30,7 @@ extern u32 func_02013340(u32 a);
 extern void func_020135b8(u32 a, u32 b, void *c);
 extern void func_0206fb04(u32 a, u32 b, u32 c, u32 d);
 extern void func_02090690(u32 a);
-extern void func_020bf378(u32 a);
+extern void TextBuf_Clear(u32 a);
 extern void func_020c36cc(void *a, VoidFunc draw, u32 b, u32 c);
 extern void func_020c4258(u32 a);
 extern s32 func_020fe688(s32 a, s32 b);   /* fixed-point divide */
@@ -158,7 +158,7 @@ void Choice_Swap(void)
     case 0:
         data_0213b214.unk22 = 1;
         data_0213b214.blink = 0xF;
-        func_020bf378(0);
+        TextBuf_Clear(0);
         Snd_Play0(10);
         CHOICE_WORK->timer = 0x20;
         CHOICE_WORK->side[1].ox = CHOICE_WORK->side[1].x;
