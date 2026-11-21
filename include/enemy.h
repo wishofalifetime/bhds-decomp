@@ -124,7 +124,9 @@ typedef struct EnemyObj {
     /* 0x0C1 */ s8 unk0C1;
     /* 0x0C2 */ u8 unk0C2[0xC6 - 0xC2];
     /* 0x0C6 */ s16 unk0C6;
-    /* 0x0C8 */ u8 unk0C8[0x176 - 0xC8];
+    /* 0x0C8 */ u8 unk0C8[0x168 - 0xC8];
+    /* 0x168 */ u8 unk168;
+    /* 0x169 */ u8 unk169[0x176 - 0x169];
     /* 0x176 */ s16 destX;
     /* 0x178 */ s16 destZ;
     /* 0x17A */ u8 unk17A[2];
