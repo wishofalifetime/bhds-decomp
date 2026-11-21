@@ -1,16 +1,34 @@
 /*
- * choice_draw.c - drawing and moving the two-sided screen's markers.
- * JP (ABHJ) 0x020BC6CC - 0x020BC934. Not matching yet: in Choice_Draw and
+ * choice_draw.c - drawing and moving the two-sided screen's markers, and
+ * leaving to the next scene.
+ * JP (ABHJ) 0x020BC6CC - 0x020BCA10. Not matching yet: in Choice_Draw and
  * Choice_Start the original converts constant arguments (a u16 0 through
- * the stack, a u8 1 with and #0xFF) where our build folds them.
+ * the stack, a u8 1 with and #0xFF) where our build folds them; in
+ * Choice_Exit the original does not if-convert the scene assignments and
+ * keeps two pool entries for func_020d6468.
  *
  * Functions are defined in reverse address order (mwccarm emits functions
  * in reverse source order).
  */
 #include "types.h"
 #include "choice.h"
+#include "game.h"
+
+typedef struct UnkStruct_0213a900 {
+    /* 0x00 */ u8 unk00[0x20];
+    /* 0x20 */ u8 unk20;
+} UnkStruct_0213a900;
 
 /* Not yet identified. JP addresses. */
+extern void func_02072354(void);
+extern BOOL func_02087ad4(void);
+extern void func_0208e610(void);
+extern void func_020adf8c(void);
+extern void func_020d6468(void);
+extern void SndBank_UnloadAll(void);
+extern u8 SndCh_GetStatus(u32 ch);
+extern u16 data_0213a708;                 /* JP 0x0213A708: nonzero while fading */
+extern UnkStruct_0213a900 data_0213a900;  /* JP 0x0213A900 */
 extern void func_020062ac(u32 layer, ChoiceSprite *spr);
 extern void func_02091a88(u32 a, void *b, u32 c, u32 d);
 extern void func_020bf378(u32 a);
@@ -33,6 +51,38 @@ static inline void MI_CpuClear16(void *dest, u32 size)
 static inline u32 Choice_Attr(u8 a)
 {
     return (a << 24) | 0x1100;
+}
+
+/* Pick the next scene once the fade has finished. */
+void Choice_Exit(void)
+{
+    u8 mode;
+
+    if (data_0213a708 != 0) {
+        return;
+    }
+    mode = data_0213a900.unk20;
+    gGame.unk01 = 1;
+    if (mode == 2) {
+        if (SndCh_GetStatus(1) != 1) {
+            SndBank_UnloadAll();
+            if (data_0213b214.unk1D == 0) {
+                gGame.nextScene = func_0208e610;
+            } else {
+                if (func_02087ad4() == 0) {
+                    gGame.nextScene = func_020d6468;
+                } else {
+                    gGame.nextScene = func_02072354;
+                }
+            }
+        }
+    } else {
+        if (data_0213b214.unk1D == 0) {
+            gGame.nextScene = func_020d6468;
+        } else {
+            gGame.nextScene = func_020adf8c;
+        }
+    }
 }
 
 void Choice_Start(void)

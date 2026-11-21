@@ -10,7 +10,8 @@ typedef struct ChoiceSide {
     /* 0x04 */ s32 y;
     /* 0x08 */ s32 vx;
     /* 0x0C */ s32 vy;
-    /* 0x10 */ u8 unk10[8];
+    /* 0x10 */ s32 ox;           /* position before the current step */
+    /* 0x14 */ s32 oy;
     /* 0x18 */ u8 count;
     /* 0x19 */ u8 kind;
     /* 0x1A */ u8 unk1A[2];
@@ -19,7 +20,9 @@ typedef struct ChoiceSide {
 /* Scene work area (data_0213b214.work). */
 typedef struct ChoiceWork {
     /* 0x00 */ u8 cur;
-    /* 0x01 */ u8 unk01[8];
+    /* 0x01 */ u8 unk01[3];
+    /* 0x04 */ s32 dir;          /* -1 or 1 */
+    /* 0x08 */ u8 timer;
     /* 0x09 */ u8 blink[2];      /* 1: the button blinks */
     /* 0x0B */ u8 unk0B;
     /* 0x0C */ ChoiceSide side[2];
@@ -48,5 +51,9 @@ typedef struct ChoicePos {
 
 void Choice_UpdateCursor(void);
 BOOL Choice_Blink(void);
+void Choice_Draw(void);
+void Choice_Move(void);
+void Choice_SetPos(s32 side, BOOL neg);
+void Choice_Start(void);
 
 #endif /* BHDS_CHOICE_H */

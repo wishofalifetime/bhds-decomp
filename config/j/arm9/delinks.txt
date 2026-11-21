@@ -149,4 +149,8 @@ src/choice.c:
     .text start:0x020bc624 end:0x020bc6cc
 
 src/choice_draw.c:
-    .text start:0x020bc6cc end:0x020bc934
+    .text start:0x020bc6cc end:0x020bca10
+
+src/choice_scene.c:
+    complete
+    .text start:0x020bca10 end:0x020bd030
