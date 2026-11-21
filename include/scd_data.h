@@ -223,7 +223,9 @@ typedef struct UnkStruct_0213b214 {
     /* 0x94 */ u8 unk94;         /* set by opcode 0x33 cmd 12 */
     /* 0x95 */ u8 unk95[0x258 - 0x95];
     /* 0x258 */ struct SceneModel *model;
-    /* 0x25C */ u8 unk25C[0x274 - 0x25C];
+    /* 0x25C */ u8 unk25C[0x264 - 0x25C];
+    /* 0x264 */ s32 unk264;
+    /* 0x268 */ u8 unk268[0x274 - 0x268];
     /* 0x274 */ s32 unk274;
     /* 0x278 */ u8 unk278;
     /* 0x279 */ u8 unk279;

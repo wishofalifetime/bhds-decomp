@@ -72,6 +72,12 @@ typedef struct ExamPos {
     /* 0x02 */ u8 unk02[2];
 } ExamPos;
 
+/* An angle range the model must be turned into (width 0: any angle). */
+typedef struct ExamRange {
+    /* 0x00 */ u16 width;
+    /* 0x02 */ u16 center;
+} ExamRange;
+
 /* Scene work area (data_0213b214.work). */
 typedef struct ExamWork {
     /* 0x00 */ u8 analog;        /* last input came from the touch screen */
@@ -81,13 +87,15 @@ typedef struct ExamWork {
     /* 0x04 */ u16 msg;
     /* 0x06 */ u16 shownMsg;
     /* 0x08 */ u32 msgArg;
-    /* 0x0C */ u8 unk0C[4];
+    /* 0x0C */ struct ExamRange *ranges;  /* next angle range to test */
     /* 0x10 */ ItemSprite icon;
 } ExamWork;
 
 /* The model's rotation (inside data_0213b214). */
 typedef struct UnkStruct_0213b414 {
-    /* 0x00 */ u8 unk00[0x6E];
+    /* 0x00 */ u8 unk00[0x24];
+    /* 0x24 */ u16 unk24;
+    /* 0x26 */ u8 unk26[0x6E - 0x26];
     /* 0x6E */ s16 rotX;
     /* 0x70 */ s16 rotY;
 } UnkStruct_0213b414;
@@ -101,5 +109,10 @@ typedef struct ItemStackInfo {
 
 #define EXAM_WORK ((ExamWork *)data_0213b214.work)
 #define INV_SLOTS ((u8 (*)[2])data_02147640.unk538)
+
+void Exam_Draw(void);
+void Exam_FreeIcon(void);
+void Exam_Input(void);
+void ItemSprite_Init(ItemSprite *s, s32 idx);
 
 #endif /* BHDS_EXAM_H */

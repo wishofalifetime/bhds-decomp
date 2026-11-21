@@ -165,3 +165,7 @@ src/exam_take.c:
 src/exam_act.c:
     complete
     .text start:0x020bd4f4 end:0x020bd664
+
+src/exam_scene.c:
+    complete
+    .text start:0x020bd664 end:0x020bdc48
