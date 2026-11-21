@@ -180,3 +180,10 @@ src/reward_restart.c:
 src/reward_scene.c:
     complete
     .text start:0x020be528 end:0x020be868
+
+src/file_draw.c:
+    complete
+    .text start:0x020be868 end:0x020beb20
+
+src/file_list.c:
+    .text start:0x020beb20 end:0x020bed7c

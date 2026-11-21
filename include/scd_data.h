@@ -16,7 +16,8 @@ typedef struct UnkStruct_0213a71c {
     /* 0x03 */ u8 unk03;
     /* 0x04 */ u8 unk04;
     /* 0x05 */ u8 unk05;
-    /* 0x06 */ u8 unk06[0x08 - 0x06];
+    /* 0x06 */ u8 unk06;
+    /* 0x07 */ u8 unk07;
     /* 0x08 */ u8 unk08;
     /* 0x09 */ u8 unk09;
     /* 0x0A */ u8 unk0A;         /* copied from an object by opcode 0x39 */
@@ -244,7 +245,9 @@ typedef struct UnkStruct_02144640 {
     /* 0xAE */ u8 unkAE;
     /* 0xAF */ u8 unkAF;
     /* 0xB0 */ s16 maxHealth;
-    /* 0xB2 */ u8 unkB2[0xE3 - 0xB2];
+    /* 0xB2 */ u8 unkB2[0xDC - 0xB2];
+    /* 0xDC */ UnkEntry_02147d0c *pickup;  /* item being picked up */
+    /* 0xE0 */ u8 unkE0[0xE3 - 0xE0];
     /* 0xE3 */ u8 unkE3;
 } UnkStruct_02144640;
 
