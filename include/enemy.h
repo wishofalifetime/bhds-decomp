@@ -85,19 +85,24 @@ typedef struct EnemyObj {
     /* 0x00A */ u8 variant;
     /* 0x00B */ u8 unk00B;
     /* 0x00C */ u16 *unk00C;
-    /* 0x010 */ u8 unk010[0x30 - 0x10];
+    /* 0x010 */ u8 unk010[8];
+    /* 0x018 */ u32 unk018;
+    /* 0x01C */ u8 unk01C[0x30 - 0x1C];
     /* 0x030 */ s32 posX;
     /* 0x034 */ s32 posY;
     /* 0x038 */ s32 posZ;
-    /* 0x03C */ u8 unk03C[0x44 - 0x3C];
+    /* 0x03C */ u8 unk03C[6];
+    /* 0x042 */ s16 unk042;
     /* 0x044 */ s16 rotY;
-    /* 0x046 */ u8 unk046[0x54 - 0x46];
+    /* 0x046 */ s16 unk046;
+    /* 0x048 */ u8 unk048[0x54 - 0x48];
     /* 0x054 */ u8 unk054[0x80 - 0x54];
     /* 0x080 */ s16 unk080;
     /* 0x082 */ u8 unk082;
     /* 0x083 */ u8 unk083;
     /* 0x084 */ u8 unk084;
-    /* 0x085 */ u8 unk085[0x91 - 0x85];
+    /* 0x085 */ u8 unk085[0x90 - 0x85];
+    /* 0x090 */ u8 unk090;     /* top-level state */
     /* 0x091 */ u8 unk091;
     /* 0x092 */ u8 range;        /* index into the range tables */
     /* 0x093 */ u8 unk093;
@@ -113,7 +118,8 @@ typedef struct EnemyObj {
     /* 0x0A4 */ u8 unk0A4[2];
     /* 0x0A6 */ s16 speed;
     /* 0x0A8 */ s16 timer;
-    /* 0x0AA */ u8 unk0AA[0xB0 - 0xAA];
+    /* 0x0AA */ u8 unk0AA[4];
+    /* 0x0AE */ s16 unk0AE;
     /* 0x0B0 */ s32 unkB0;
     /* 0x0B4 */ s32 unkB4;
     /* 0x0B8 */ s32 unkB8;
@@ -122,7 +128,8 @@ typedef struct EnemyObj {
     /* 0x0BE */ u8 unkBE;
     /* 0x0BF */ u8 unk0BF[0xC1 - 0xBF];
     /* 0x0C1 */ s8 unk0C1;
-    /* 0x0C2 */ u8 unk0C2[0xC6 - 0xC2];
+    /* 0x0C2 */ s16 unk0C2;
+    /* 0x0C4 */ s16 unk0C4;
     /* 0x0C6 */ s16 unk0C6;
     /* 0x0C8 */ u8 unk0C8[0x168 - 0xC8];
     /* 0x168 */ u8 unk168;
@@ -153,6 +160,8 @@ void Enemy_UpdateRange(void);
 void Enemy_Reset(void);
 void Enemy_SetAnim(u32 anim);
 void Enemy_Init(u32 arg);
+void Enemy_AllocGfx(void);
+void Enemy_LoadGfx(void);
 u8 Enemy_Animate(u8 mode, s16 speed);
 
 #endif /* BHDS_ENEMY_H */

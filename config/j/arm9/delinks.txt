@@ -139,3 +139,14 @@ src/enemy_die.c:
 src/enemy_init.c:
     complete
     .text start:0x020bbe28 end:0x020bc498
+
+src/enemy_main.c:
+    complete
+    .text start:0x020bc498 end:0x020bc624
+
+src/choice.c:
+    complete
+    .text start:0x020bc624 end:0x020bc6cc
+
+src/choice_draw.c:
+    .text start:0x020bc6cc end:0x020bc934

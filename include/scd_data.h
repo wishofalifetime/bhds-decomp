@@ -137,6 +137,7 @@ typedef struct UnkStruct_0214b640 {
     /* 0x7AA */ u8 unk7AA;
     /* 0x7AB */ u8 unk7AB;
     /* 0x7AC */ RoomData *room;
+    /* 0x7B0 */ void *unk7B0;
 } UnkStruct_0214b640;
 
 extern UnkStruct_0214b640 data_0214b640;  /* JP 0x0214B640 */
@@ -191,7 +192,10 @@ typedef struct UnkStruct_0213b214 {
     /* 0x09 */ u8 itemId;        /* item being used */
     /* 0x0A */ u8 unk0A[0x16 - 0x0A];
     /* 0x16 */ u8 unk16;
-    /* 0x17 */ u8 unk17[0x20 - 0x17];
+    /* 0x17 */ u8 unk17[0x1D - 0x17];
+    /* 0x1D */ u8 unk1D;
+    /* 0x1E */ u8 unk1E;
+    /* 0x1F */ u8 blink;         /* blink counter */
     /* 0x20 */ u8 state;         /* scene state (1: running, 2: leaving) */
     /* 0x21 */ u8 unk21[0x26 - 0x21];
     /* 0x26 */ u16 speed;        /* scroll step per frame, 8.8 fixed */
