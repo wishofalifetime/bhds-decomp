@@ -191,3 +191,11 @@ src/file_list.c:
 src/file_scroll.c:
     complete
     .text start:0x020bf048 end:0x020bf318
+
+src/file_read.c:
+    complete
+    .text start:0x020bf318 end:0x020bf738
+    .data start:0x0212f5a0 end:0x0212f5b4
+
+src/file_col.c:
+    .text start:0x020bf738 end:0x020bf7f0

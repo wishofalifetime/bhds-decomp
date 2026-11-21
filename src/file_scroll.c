@@ -48,7 +48,7 @@ extern void File_Refresh(void);  /* US/EU only */
 extern UnkDtcm_027e01ac data_027e01ac;    /* DTCM */
 
 /* Hide the left button on the first page and the right one on the last. */
-void File_HideButtons(s32 page, s32 first, s32 last)
+void File_HideButtons(u8 page, u8 first, u8 last)
 {
     if (first == page) {
         FILE_WORK->buttons[0] = -1;
