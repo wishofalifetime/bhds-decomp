@@ -31,10 +31,48 @@ typedef struct EnemyAnim {
     /* 0x08 */ EnemyAnimData *data;
 } EnemyAnim;
 
+/* Points at an entry of data_0213fc68. */
+typedef struct EnemySlotRef {
+    /* 0x00 */ u8 unk00;
+    /* 0x01 */ u8 index;
+} EnemySlotRef;
+
 typedef struct EnemyModel {
     /* 0x00 */ u8 unk00[0x10];
     /* 0x10 */ EnemyAnim *anim;
+    /* 0x14 */ EnemySlotRef *slot;
 } EnemyModel;
+
+typedef struct EnemyVec {
+    /* 0x00 */ s32 x;
+    /* 0x04 */ s32 y;
+    /* 0x08 */ s32 z;
+} EnemyVec;
+
+/* A 0x58-byte entry of the table at data_0213fc68. */
+typedef struct EnemySlot {
+    /* 0x00 */ u32 flags;
+    /* 0x04 */ EnemyVec vec;
+    /* 0x10 */ u8 unk10[0x58 - 0x10];
+} EnemySlot;
+
+typedef struct EnemyRes {
+    /* 0x00 */ u8 unk00[4];
+    /* 0x04 */ void *data;
+} EnemyRes;
+
+/* Graphics of an enemy (EnemyObj.gfx). */
+typedef struct EnemyGfx {
+    /* 0x00 */ u8 unk00[4];
+    /* 0x04 */ EnemyRes *res;
+    /* 0x08 */ u8 unk08[4];
+    /* 0x0C */ void *tex;
+    /* 0x10 */ u8 unk10[4];
+    /* 0x14 */ EnemySlotRef *slot;
+    /* 0x18 */ u8 unk18[0x20 - 0x18];
+    /* 0x20 */ u8 unk20[0x54 - 0x20];
+    /* 0x54 */ EnemySlot *slotPtr;
+} EnemyGfx;
 
 /* The object fields used here. Overlaps Obj (obj.h), which is still partial. */
 typedef struct EnemyObj {
@@ -44,7 +82,8 @@ typedef struct EnemyObj {
     /* 0x007 */ s8 unk007;
     /* 0x008 */ u8 unk008;
     /* 0x009 */ u8 kind;
-    /* 0x00A */ u8 unk00A[2];
+    /* 0x00A */ u8 variant;
+    /* 0x00B */ u8 unk00B;
     /* 0x00C */ u16 *unk00C;
     /* 0x010 */ u8 unk010[0x30 - 0x10];
     /* 0x030 */ s32 posX;
@@ -86,6 +125,7 @@ typedef struct EnemyObj {
     /* 0x178 */ s16 destZ;
     /* 0x17A */ u8 unk17A[2];
     /* 0x17C */ u8 work[0xC];  /* EnemyWork, see ENEMY_WORK */
+    /* 0x188 */ EnemyGfx *gfx;
 } EnemyObj;
 
 #define ENEMY_WORK(e) ((EnemyWork *)(e)->work)
@@ -106,5 +146,6 @@ void Enemy_CheckState(void);
 void Enemy_UpdateRange(void);
 void Enemy_Reset(void);
 void Enemy_SetAnim(u32 anim);
+u8 Enemy_Animate(u8 mode, s16 speed);
 
 #endif /* BHDS_ENEMY_H */

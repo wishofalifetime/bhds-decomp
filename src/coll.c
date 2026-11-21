@@ -28,7 +28,7 @@ typedef struct CollMtx {
     s32 m[8];
 } CollMtx;
 
-extern void func_021188b8(void *dst, u32 size);  /* runtime: clear bytes */
+extern void __clear(void *dst, u32 size);  /* runtime: clear bytes (mwcc zero-init) */
 extern void func_01ff84ac(u16 angle, CollMtx *m);                 /* ITCM */
 extern void func_01ff83fc(CollMtx *m, void *v, CollPos *out);     /* ITCM */
 extern void func_01ff834c(CollMtx *m, void *v, s16 *out);         /* ITCM */
@@ -63,7 +63,7 @@ u8 Coll_CheckMove(void *from, void *to)
     u8 i;
     RoomGroupItem **group;
 
-    func_021188b8(res, 4);
+    __clear(res, 4);
     obj = data_027e000c;
     if (obj->unk08 & 4) {
         return 0;

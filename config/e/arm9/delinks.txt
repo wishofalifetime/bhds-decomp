@@ -127,3 +127,7 @@ src/enemy_ai.c:
 src/enemy_act.c:
     complete
     .text start:0x020bb5dc end:0x020bbaa4
+
+src/enemy_gfx.c:
+    complete
+    .text start:0x020bbaa4 end:0x020bbd48

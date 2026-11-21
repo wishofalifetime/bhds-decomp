@@ -22,7 +22,6 @@ extern void func_020a00bc(EnemyObj *obj, u8 bank, u8 anim);
 extern void func_020a2c88(EnemyObj *obj);
 extern void func_020ad5ac(void);
 extern void func_020d908c(void);
-extern u8 func_020bb37c(u8 mode, s16 speed);
 
 extern u16 data_02121864[];               /* JP 0x02121864: animation bank by kind */
 extern u16 data_02121b4c[];               /* JP 0x02121B4C: animation by kind, 0x7FFF: none */
@@ -59,7 +58,7 @@ void Enemy_Hit(void)
         Enemy_SetAnim(r == 0 ? 0x95 : 0x7F);
         data_027e000c->model->anim->frame = data_027e000c->model->anim->data->frameCount << 12;
         data_027e000c->unk098 = 0;
-        func_020bb37c(0, 0x1000);
+        Enemy_Animate(0, 0x1000);
     }
 }
 
@@ -102,7 +101,7 @@ void Enemy_Update(void)
     } else {
         mode = 1;
     }
-    ENEMY_WORK(data_027e000c)->flags = func_020bb37c(mode, 0x1000 / (data_027e000c->unk098 + 1));
+    ENEMY_WORK(data_027e000c)->flags = Enemy_Animate(mode, 0x1000 / (data_027e000c->unk098 + 1));
     Enemy_CheckState();
     func_020a2c88(data_027e000c);
     func_01ffabf8(data_02144584, data_027e000c);

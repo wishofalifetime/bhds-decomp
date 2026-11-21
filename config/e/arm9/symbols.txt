@@ -3309,10 +3309,10 @@ Enemy_Update kind:function(arm,size=0xfc) addr:0x020bb7bc
 Enemy_Init kind:function(arm,size=0xdc) addr:0x020bb8b8
 Enemy_Hit kind:function(arm,size=0x7c) addr:0x020bb994
 Enemy_SetAnim kind:function(arm,size=0x94) addr:0x020bba10
-func_020bb37c kind:function(arm,size=0x148) addr:0x020bbaa4
-func_020bb4c4 kind:function(arm,size=0x74) addr:0x020bbbec
-func_020bb538 kind:function(arm,size=0xac) addr:0x020bbc60
-func_020bb5e4 kind:function(arm,size=0x3c) addr:0x020bbd0c
+Enemy_Animate kind:function(arm,size=0x148) addr:0x020bbaa4
+Enemy_ResetGfx kind:function(arm,size=0x74) addr:0x020bbbec
+Enemy_LoadGfx kind:function(arm,size=0xac) addr:0x020bbc60
+Enemy_AllocGfx kind:function(arm,size=0x3c) addr:0x020bbd0c
 func_020bb620 kind:function(arm,size=0x234) addr:0x020bbd48
 func_020bb854 kind:function(arm,size=0x258) addr:0x020bbf7c
 func_020bbaac kind:function(arm,size=0x1e4) addr:0x020bc1d4
@@ -5763,7 +5763,7 @@ _ddiv kind:function(arm,size=0x544) addr:0x02118c8c
 _fp_init kind:function(arm,size=0x4) addr:0x021191d0
 func_021188a8 kind:function(arm,size=0x8) addr:0x021191d4
 func_021188b0 kind:function(arm,size=0x8) addr:0x021191dc
-func_021188b8 kind:function(arm,size=0x28) addr:0x021191e4
+__clear kind:function(arm,size=0x28) addr:0x021191e4
 __call_static_initializers kind:function(arm,size=0x38) addr:0x0211920c
 data_02118924 kind:data(any) addr:0x02119250
 data_02118934 kind:data(any) addr:0x02119260
