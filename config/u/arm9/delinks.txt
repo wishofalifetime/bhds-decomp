@@ -176,3 +176,7 @@ src/reward.c:
 
 src/reward_restart.c:
     .text start:0x020be4d0 end:0x020be528
+
+src/reward_scene.c:
+    complete
+    .text start:0x020be528 end:0x020be868

@@ -3374,10 +3374,10 @@ Reward_Draw kind:function(arm,size=0xcc) addr:0x020be27c
 Reward_SetSlot kind:function(arm,size=0x40) addr:0x020be348
 Reward_Finish kind:function(arm,size=0x148) addr:0x020be388
 Reward_Restart kind:function(arm,size=0x58) addr:0x020be4d0
-func_020be11c kind:function(arm,size=0xc0) addr:0x020be528
-func_020be1dc kind:function(arm,size=0xf0) addr:0x020be5e8
-func_020be2cc kind:function(arm,size=0x160) addr:0x020be6d8
-func_020be42c kind:function(arm,size=0x30) addr:0x020be838
+Reward_Input kind:function(arm,size=0xc0) addr:0x020be528
+Reward_ZoomIn kind:function(arm,size=0xf0) addr:0x020be5e8
+Reward_Init kind:function(arm,size=0x160) addr:0x020be6d8
+Reward_Update kind:function(arm,size=0x30) addr:0x020be838
 func_020be45c kind:function(arm,size=0x284) addr:0x020be868
 func_020be6e0 kind:function(arm,size=0x34) addr:0x020beaec
 func_020be714 kind:function(arm,size=0x25c) addr:0x020beb20
@@ -5734,7 +5734,7 @@ func_02116f2c kind:function(arm,size=0x80) addr:0x021174f0
 .L_02116f40 kind:label(arm) addr:0x02117504 local
 func_02116fac kind:function(arm,size=0x4) addr:0x02117570
 _dls kind:function(arm,size=0x88) addr:0x02117574
-func_02117038 kind:function(arm,size=0x88) addr:0x021175fc
+_dleq kind:function(arm,size=0x88) addr:0x021175fc
 func_021170c0 kind:function(arm,size=0x94) addr:0x02117684
 .L_021170d4 kind:label(arm) addr:0x02117698 local
 func_02117154 kind:function(arm,size=0x4) addr:0x02117718
